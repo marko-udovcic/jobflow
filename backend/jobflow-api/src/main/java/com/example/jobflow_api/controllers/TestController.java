@@ -16,7 +16,7 @@ public class TestController {
     public ResponseEntity<Map<String, String>> sayHello() {
         Map<String, String> response = new HashMap<>();
         response.put("message", "Hello from backend!");
-        return ResponseEntity.ok(response);  // Vraća JSON
+        return ResponseEntity.ok(response);
     }
 
 }
