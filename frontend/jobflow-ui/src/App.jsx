@@ -1,20 +1,25 @@
-import "./App.css";
+import axios from "axios";
 import { useEffect, useState } from "react";
+import moment from "moment";
 function App() {
-  const [message, setMessage] = useState("Empty message");
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/hello")
-      .then((response) => response.json())
-      .then((data) => {
-        setMessage(data.message);
+    axios
+      .get("http://localhost:8080/api/hello")
+      .then((response) => {
+        console.log("Axios response:", response.data);
+        setMessage(response.data.message);
       })
-      .catch((error) => console.error("Error:", error));
+      .catch((error) => console.error("Axios Error:", error));
   }, []);
+  console.log(moment().format("YYYY-MM-DD HH:mm:ss"));
   return (
-    <>
-      <p>{message}</p>
-    </>
+    <div className="App">
+      <header className="App-header">
+        <h1>{message}</h1>
+      </header>
+    </div>
   );
 }
 
