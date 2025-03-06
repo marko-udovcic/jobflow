@@ -38,7 +38,7 @@ public class JobPosting {
     @Column(name = "posting_date", updatable = false)
     private LocalDateTime postingDate;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "employer_id", referencedColumnName = "id", nullable = false)
     private AppUser employer;
 
