@@ -1,7 +1,5 @@
 CREATE TABLE app_user (
     id VARCHAR(50) NOT NULL,
-    firstname VARCHAR(50),
-    lastname VARCHAR(50),
     email VARCHAR(150) UNIQUE NOT NULL,
     password VARCHAR(255),
     role VARCHAR(50) NOT NULL,
@@ -23,10 +21,16 @@ CREATE TABLE category (
 
 CREATE TABLE digital_cv (
     worker_id VARCHAR(50) NOT NULL,
+    firstname VARCHAR(50),
+    lastname VARCHAR(50),
+    email VARCHAR(150) UNIQUE NOT NULL,
+    country VARCHAR(100),
+    city VARCHAR(100),
+    phone VARCHAR(100),
     summary TEXT NULL,
     work_experience TEXT NULL,
     education TEXT NULL,
-    personal_skills TEXT NULL,
+    languages TEXT NULL,
     computer_skills TEXT NULL,
     other_skills TEXT NULL,
     driving_licence TEXT NULL,
