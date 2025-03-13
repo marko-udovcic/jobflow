@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -16,8 +17,14 @@ import java.time.LocalDateTime;
 @Table(name = "job_posting")
 public class JobPosting {
     @Id
-    @UuidGenerator
     private String id;
+
+    @PrePersist
+    public void generateUUID() {
+        if (id == null) {
+            id = UUID.randomUUID().toString();
+        }
+    }
 
     private String title;
     private String salary;
@@ -31,8 +38,8 @@ public class JobPosting {
     @Column(name = "hourly_rate", length = 20)
     private String hourlyRate;
 
-    @Column(name = "job_requirements", columnDefinition = "TEXT")
-    private String jobRequirements;
+    @Column(name = "jobs_requirements", columnDefinition = "TEXT")
+    private String jobsRequirements;
 
     @CreationTimestamp
     @Column(name = "posting_date", updatable = false)
