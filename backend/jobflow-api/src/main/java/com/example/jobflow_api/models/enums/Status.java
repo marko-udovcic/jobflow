@@ -1,7 +1,8 @@
 package com.example.jobflow_api.models.enums;
 
 public enum Status {
-    Approved,
-    Rejected,
-    Pending
+    APPROVED,
+    REJECTED,
+    PENDING,
+    NOT_A_COMPANY
 }
