@@ -1,25 +1,32 @@
 package com.example.jobflow_api.controllers;
 
+import com.example.jobflow_api.dtos.UpdateCompanyRequest;
 import com.example.jobflow_api.dtos.UserDTO;
+import com.example.jobflow_api.models.AppUser;
 import com.example.jobflow_api.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@RequiredArgsConstructor
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 public class UserController {
-    @Autowired
-    UserService userService;
+    private final UserService userService;
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable String id) {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
+    @PutMapping("/update-company")
+    public ResponseEntity<?> updateUser(@RequestBody UpdateCompanyRequest updateCompanyRequest, HttpServletRequest request) {
+        AppUser updatedUser = userService.updateUser(updateCompanyRequest, request);
+
+        return ResponseEntity.ok("User updated successfully");
+    }
 
 }
