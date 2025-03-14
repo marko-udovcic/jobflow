@@ -18,7 +18,6 @@ public class DigitalCv {
     @Column(name = "worker_id", length = 50)
     private String workerId;
 
-
     private String firstname;
     private String lastname;
 
@@ -64,6 +63,12 @@ public class DigitalCv {
     private String nationality;
 
     @OneToOne(cascade = CascadeType.REMOVE)
+    @MapsId
     @JoinColumn(name = "worker_id", referencedColumnName = "id")
     private AppUser appUser;
+
+    public void setAppUserAndId(AppUser appUser) {
+        this.appUser = appUser;
+    }
+
 }
