@@ -108,4 +108,15 @@ public class AuthServiceImpl implements AuthService {
         return ResponseEntity.ok(response);
     }
 
+    @Override
+    public UserDetailsImpl getCurrentUserDetails() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetailsImpl){
+            return (UserDetailsImpl) authentication.getPrincipal();
+        }
+
+        return null;
+    }
+
 }
