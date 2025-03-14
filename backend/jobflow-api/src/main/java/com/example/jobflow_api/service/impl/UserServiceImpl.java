@@ -2,6 +2,7 @@ package com.example.jobflow_api.service.impl;
 
 import com.example.jobflow_api.dtos.UpdateCompanyRequest;
 import com.example.jobflow_api.dtos.UserDTO;
+import com.example.jobflow_api.exceptions.EntityNotFoundException;
 import com.example.jobflow_api.models.AppUser;
 import com.example.jobflow_api.repositories.UserRepository;
 import com.example.jobflow_api.security.jwt.JwtUtils;
@@ -22,9 +23,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUserById(String id) {
-        AppUser user = userRepository.findById(id).orElseThrow();
+        AppUser user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User with ID " + id + " not found"));
         return convertToDto(user);
     }
+
+
 
     @Override
     public AppUser updateUser(UpdateCompanyRequest updateCompanyRequest, HttpServletRequest request) {
