@@ -1,6 +1,7 @@
 package com.example.jobflow_api.models;
 
 import com.example.jobflow_api.models.enums.Status;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,11 +37,12 @@ public class JobApplication {
     @Column(name = "application_date", updatable = false)
     private LocalDateTime applicationDate;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "job_posting_id", referencedColumnName = "id", nullable = false)
+    @JsonBackReference
     private JobPosting jobPosting;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "worker_id", referencedColumnName = "id", nullable = false)
     private AppUser worker;
 
