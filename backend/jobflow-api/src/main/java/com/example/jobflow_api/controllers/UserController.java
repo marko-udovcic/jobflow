@@ -37,4 +37,14 @@ public class UserController {
         return ResponseEntity.ok("User updated successfully");
     }
 
+    @PutMapping("/update-status/{id}")
+    public ResponseEntity<?> updateCompanyStatus(@PathVariable String id, String status){
+        return userService.updateCompanyStatus(id,status);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUserProfile(@PathVariable String id) {
+        return userService.deleteUserProfile(id);
+    }
+
 }
