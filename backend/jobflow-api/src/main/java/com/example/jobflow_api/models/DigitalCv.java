@@ -62,7 +62,7 @@ public class DigitalCv {
     @Column(name = "nationality", columnDefinition = "TEXT")
     private String nationality;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.DETACH)
     @MapsId
     @JoinColumn(name = "worker_id", referencedColumnName = "id")
     private AppUser appUser;

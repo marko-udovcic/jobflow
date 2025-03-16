@@ -3,6 +3,7 @@ package com.example.jobflow_api.models;
 
 import com.example.jobflow_api.models.enums.Status;
 import com.example.jobflow_api.models.enums.UserRole;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -50,4 +52,8 @@ public class AppUser {
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "employer", cascade = CascadeType.REMOVE)
+    @JsonManagedReference
+    private List<JobPosting> jobPostings;
 }

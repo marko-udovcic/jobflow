@@ -1,5 +1,7 @@
 package com.example.jobflow_api.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -45,11 +48,16 @@ public class JobPosting {
     @Column(name = "posting_date", updatable = false)
     private LocalDateTime postingDate;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "employer_id", referencedColumnName = "id", nullable = false)
+    @JsonBackReference
     private AppUser employer;
 
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = true)
     private Category category;
+
+    @OneToMany(mappedBy = "jobPosting", cascade = CascadeType.REMOVE)
+    @JsonManagedReference
+    private List<JobApplication> jobApplications;
 }
