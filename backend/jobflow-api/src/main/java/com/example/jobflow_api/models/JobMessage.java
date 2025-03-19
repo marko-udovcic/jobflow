@@ -1,6 +1,7 @@
 package com.example.jobflow_api.models;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,6 +32,7 @@ public class JobMessage {
 
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "job_application_id", referencedColumnName = "id", nullable = false)
+    @JsonBackReference
     private JobApplication jobApplication;
 
     @ManyToOne(cascade = CascadeType.REMOVE)
