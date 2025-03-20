@@ -2,6 +2,7 @@ package com.example.jobflow_api.models;
 
 import com.example.jobflow_api.models.enums.Status;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,6 +11,14 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+@NamedEntityGraph(
+        name = "JobApplication.full",
+        attributeNodes = {
+                @NamedAttributeNode(value = "messages")
+        }
+)
 
 @Data
 @Entity
@@ -46,5 +55,8 @@ public class JobApplication {
     @JoinColumn(name = "worker_id", referencedColumnName = "id", nullable = false)
     private AppUser worker;
 
+    @OneToMany(mappedBy = "jobApplication", cascade = CascadeType.REMOVE)
+    @JsonManagedReference
+    private List<JobMessage> messages;
 
 }
