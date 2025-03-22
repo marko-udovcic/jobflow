@@ -4,6 +4,7 @@ import com.example.jobflow_api.security.request.LoginRequest;
 import com.example.jobflow_api.security.request.SignupRequest;
 import com.example.jobflow_api.security.response.MessageResponse;
 import com.example.jobflow_api.service.AuthService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,8 +36,13 @@ public class AuthController {
     }
 
     @PostMapping("/public/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
-        return authService.authenticateUser(loginRequest);
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+        return authService.authenticateUser(loginRequest, response);
+    }
+
+    @PostMapping("/public/logout")
+    public ResponseEntity<?> logoutUser(HttpServletResponse response) {
+        return authService.logoutUser(response);
     }
 
 }
