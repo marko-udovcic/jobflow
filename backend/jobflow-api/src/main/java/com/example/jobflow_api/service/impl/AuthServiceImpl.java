@@ -11,6 +11,8 @@ import com.example.jobflow_api.security.response.LoginResponse;
 import com.example.jobflow_api.security.response.MessageResponse;
 import com.example.jobflow_api.security.services.UserDetailsImpl;
 import com.example.jobflow_api.service.AuthService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -83,7 +85,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public ResponseEntity<?> authenticateUser(LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(LoginRequest loginRequest, HttpServletResponse response) {
         Authentication authentication;
         try {
             authentication = authenticationManager.authenticate(
@@ -99,24 +101,44 @@ public class AuthServiceImpl implements AuthService {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         String jwtToken = jwtUtils.generateTokenFromEmail(userDetails);
 
+        Cookie cookie = new Cookie("token", jwtToken);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false);
+        cookie.setPath("/");
+        cookie.setMaxAge(172800);
+        response.addCookie(cookie);
+
+
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
-        LoginResponse response = new LoginResponse(userDetails.getUsername(), roles, jwtToken);
+        LoginResponse loginResponse = new LoginResponse(userDetails.getUsername(), roles, jwtToken);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(loginResponse);
     }
 
     @Override
     public UserDetailsImpl getCurrentUserDetails() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetailsImpl){
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetailsImpl) {
             return (UserDetailsImpl) authentication.getPrincipal();
         }
 
         return null;
+    }
+
+    @Override
+    public ResponseEntity<?> logoutUser(HttpServletResponse response) {
+        Cookie cookie = new Cookie("token", null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false);
+        cookie.setPath("/");
+        cookie.setMaxAge(172800);
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok(new MessageResponse("User logged out successfully!"));
     }
 
 }
