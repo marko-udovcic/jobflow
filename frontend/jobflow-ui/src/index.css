@@ -1,0 +1,48 @@
+@import url("https://fonts.googleapis.com/css2?family=Playwrite+HU:wght@100..400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
+@import "tailwindcss";
+
+.active {
+  @apply bg-blue-500 text-white;
+}
+
+:root {
+  --color-btn-primary-bg: #0e0e0e;
+  --color-btn-primary-text: #ffffff;
+  --color-btn-secondary-bg: #edcd59;
+  --color-btn-secondary-text: #0e0e0e;
+  --color-input-bg: #ffffff;
+  --color-input-border: #505050;
+
+  --color-body-bg: #f6f6f6;
+  --color-paragraph-text: #505050;
+  --color-heading-text: #0e0e0e;
+  --color-black-color: #0e0e0e;
+  --color-gold-color: #edcd59;
+  --color-alert-color: #8c0000;
+  --font-primary: "Poppins", sans-serif;
+  --font-secondary: "DM Sans", sans-serif;
+}
+#root {
+  @apply h-[100vh] bg-[#edcd59];
+}
+
+@layer base {
+  h1 {
+    @apply text-3xl font-[var(--font-primary)] font-semibold text-[var(--color-heading-text)];
+  }
+  h2 {
+    @apply text-2xl font-[var(--font-primary)] font-semibold lg:text-[2.5rem];
+  }
+  p {
+    @apply text-lg font-[var(--font-secondary)] font-normal text-[var(--color-paragraph-text)];
+  }
+}
+
+.app-container {
+  @apply mx-auto min-h-[100vh] w-full bg-[var(--color-body-bg)] md:w-[90%] lg:w-[79.2%];
+}
+
+.border-color-primary {
+  @apply border-2 border-[var(--color-paragraph-text)]/10;
+}
