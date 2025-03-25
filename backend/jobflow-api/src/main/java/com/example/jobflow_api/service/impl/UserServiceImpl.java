@@ -10,6 +10,8 @@ import com.example.jobflow_api.repositories.UserRepository;
 import com.example.jobflow_api.security.jwt.JwtUtils;
 import com.example.jobflow_api.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +20,12 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService {
-    @Autowired
-    UserRepository userRepository;
+@RequiredArgsConstructor
 
-    @Autowired
-    JwtUtils jwtUtils;
+public class UserServiceImpl implements UserService {
+    private final UserRepository userRepository;
+    private final JwtUtils jwtUtils;
+    private final ModelMapper modelMapper;
 
     private ResponseEntity<?> findUserAndReturnResponse(String id) {
         Optional<AppUser> user = userRepository.findById(id);
@@ -39,7 +41,8 @@ public class UserServiceImpl implements UserService {
     public UserDTO getUserById(String id) {
         AppUser user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User with ID " + id + " not found"));
-        return convertToDto(user);
+
+        return modelMapper.map(user,UserDTO.class);
     }
 
     @Override
@@ -104,14 +107,5 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.ok("User profile updated successfully.");
     }
 
-    private UserDTO convertToDto(AppUser user) {
-        return new UserDTO(user.getId(),
-                user.getEmail(),
-                user.getRole(),
-                user.getCompanyStatus(),
-                user.getCompanyName(),
-                user.getPhoneNumber(),
-                user.getAboutCompany(),
-                user.getCreatedAt());
-    }
+
 }
