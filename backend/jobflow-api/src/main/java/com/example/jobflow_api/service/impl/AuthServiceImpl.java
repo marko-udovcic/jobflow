@@ -1,9 +1,11 @@
 package com.example.jobflow_api.service.impl;
 
+import com.example.jobflow_api.dtos.UserDTO;
 import com.example.jobflow_api.models.AppUser;
 import com.example.jobflow_api.models.enums.Status;
 import com.example.jobflow_api.models.enums.UserRole;
 import com.example.jobflow_api.repositories.UserRepository;
+import com.example.jobflow_api.security.jwt.AuthTokenFilter;
 import com.example.jobflow_api.security.jwt.JwtUtils;
 import com.example.jobflow_api.security.request.LoginRequest;
 import com.example.jobflow_api.security.request.SignupRequest;
@@ -11,7 +13,9 @@ import com.example.jobflow_api.security.response.LoginResponse;
 import com.example.jobflow_api.security.response.MessageResponse;
 import com.example.jobflow_api.security.services.UserDetailsImpl;
 import com.example.jobflow_api.service.AuthService;
+import com.example.jobflow_api.service.UserService;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +42,9 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder encoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
+    private final UserService userService;
 
+    private final AuthTokenFilter authTokenFilter;
     @Transactional
     public MessageResponse registerUser(SignupRequest signupRequest) {
         try {
@@ -100,12 +106,13 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         String jwtToken = jwtUtils.generateTokenFromEmail(userDetails);
-
+        System.out.println("ispis tokena"+jwtToken);
         Cookie cookie = new Cookie("token", jwtToken);
         cookie.setHttpOnly(true);
         cookie.setSecure(false);
         cookie.setPath("/");
         cookie.setMaxAge(172800);
+        System.out.println("dodajem  token u response"+jwtToken);
         response.addCookie(cookie);
 
 
@@ -136,9 +143,21 @@ public class AuthServiceImpl implements AuthService {
         cookie.setSecure(false);
         cookie.setPath("/");
         cookie.setMaxAge(172800);
+        cookie.setDomain("localhost");
         response.addCookie(cookie);
 
         return ResponseEntity.ok(new MessageResponse("User logged out successfully!"));
+    }
+
+    @Override
+    public UserDTO getCurrentUserDto(HttpServletRequest request) {
+        UserDetailsImpl userDetails = getCurrentUserDetails();
+        if(userDetails != null){
+            String userId = userDetails.getId();
+
+            return userService.getUserById(userId);
+        }
+        return  null;
     }
 
 }
