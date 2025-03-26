@@ -63,6 +63,7 @@ AuthForm.propTypes = {
   buttonText: PropTypes.string.isRequired,
   redirectText: PropTypes.string.isRequired,
   redirectLink: PropTypes.string.isRequired,
+  linkText: PropTypes.string.isRequired,
 };
 
 export default AuthForm;
