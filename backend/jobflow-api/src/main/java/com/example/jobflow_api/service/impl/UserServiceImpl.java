@@ -8,13 +8,18 @@ import com.example.jobflow_api.models.JobPosting;
 import com.example.jobflow_api.models.enums.Status;
 import com.example.jobflow_api.repositories.UserRepository;
 import com.example.jobflow_api.security.jwt.JwtUtils;
+import com.example.jobflow_api.security.services.UserDetailsImpl;
+import com.example.jobflow_api.service.AuthService;
 import com.example.jobflow_api.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -45,16 +50,13 @@ public class UserServiceImpl implements UserService {
         return modelMapper.map(user,UserDTO.class);
     }
 
+    @Transactional
     @Override
     public AppUser updateUser(UpdateCompanyRequest updateCompanyRequest, HttpServletRequest request) {
         try {
-
-            String jwtToken = jwtUtils.getJwtFromHeader(request);
-            String email = jwtUtils.getEmailFromJwtToken(jwtToken);
-
-            if (email == null || email.isEmpty()) {
-                throw new RuntimeException("Email not found in the token");
-            }
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            String email = userDetails.getEmail();
 
             Optional<AppUser> userOptional = userRepository.findByEmail(email);
 
