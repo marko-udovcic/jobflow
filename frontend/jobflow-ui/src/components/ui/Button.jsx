@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 
 const variants = {
+  none: "",
   primary: `bg-[#0e0e0e] text-white 
     border-[#0e0e0e] border-1 
     hover:border-[#0e0e0e] hover:border-1
@@ -13,7 +14,7 @@ const variants = {
             lg:hover:text-white`,
 };
 
-export default function Button({ children, onClick, className, disabled, variant, type }) {
+export default function Button({ children, onClick, className, disabled, variant = "none", type }) {
   return (
     <button
       onClick={onClick}
