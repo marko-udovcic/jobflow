@@ -66,10 +66,12 @@ public class JobPostingServiceImpl implements JobPostingService {
     @Override
     public ResponseEntity<?> getJobOpeningsById(String employerId) {
         List<JobPosting> listJobOpenings = jobPostingRepository.findByEmployerId(employerId);
-
         if (listJobOpenings.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
+
+        AppUser employer = userRepository.findById(employerId).orElseThrow(() -> new RuntimeException("User not found"));
+        String companyName = employer.getCompanyName();
 
         List<JobListingResponse> jobListingResponseList = listJobOpenings.stream()
                 .map(jobPosting -> {
@@ -77,6 +79,7 @@ public class JobPostingServiceImpl implements JobPostingService {
                     if (jobPosting.getCategory() != null) {
                         jobListingResponse.setCategoryName(jobPosting.getCategory().getName());
                     }
+                    jobListingResponse.setCompanyName(companyName);
                     return jobListingResponse;
 
                 })
