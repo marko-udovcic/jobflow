@@ -3,6 +3,7 @@ package com.example.jobflow_api.service.impl;
 import com.example.jobflow_api.dtos.CreateJobPostingRequest;
 import com.example.jobflow_api.dtos.JobListingResponse;
 import com.example.jobflow_api.dtos.JobPostingDTO;
+import com.example.jobflow_api.dtos.UserDTO;
 import com.example.jobflow_api.models.AppUser;
 import com.example.jobflow_api.models.Category;
 import com.example.jobflow_api.models.JobPosting;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -51,9 +53,14 @@ public class JobPostingServiceImpl implements JobPostingService {
     @Override
     public JobPostingDTO getJobPostById(String id) {
         JobPosting jobPosting = jobPostingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Job Posting not found"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Job Posting not found"
+                ));
 
         JobPostingDTO jobPostingDTO = modelMapper.map(jobPosting, JobPostingDTO.class);
+        UserDTO company = modelMapper.map(jobPosting.getEmployer(), UserDTO.class);
+        jobPostingDTO.setCompany(company);
+
 
         if (jobPosting.getCategory() != null) {
             jobPostingDTO.setCategoryId(jobPosting.getCategory().getId());
