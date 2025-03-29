@@ -14,9 +14,9 @@ public class JobPostingDTO {
     private String location;
     private String jobType;
     private String hourlyRate;
-    private String jobRequirements;
+    private String jobsRequirements;
     private String postingDate;
-
+    private UserDTO company;
     private Long categoryId;
     private String categoryName;
 
