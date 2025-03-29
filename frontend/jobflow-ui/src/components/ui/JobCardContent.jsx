@@ -41,7 +41,15 @@ function JobCardContent({ job, variant, isAuthUser }) {
           <Button className={"bg-gold-color text-black-color flex-1 rounded-lg p-2 font-medium"}>
             View Detail
           </Button>
-          <Button className={"text-red-600"}>Remove</Button>
+          <Button
+            className="cursor-pointer text-red-600"
+            onClick={(event) => {
+              event.preventDefault();
+              alert("kliknuto");
+            }}
+          >
+            Remove
+          </Button>
         </div>
       ) : (
         <Button
