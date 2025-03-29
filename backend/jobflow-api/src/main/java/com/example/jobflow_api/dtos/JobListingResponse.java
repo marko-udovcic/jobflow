@@ -10,4 +10,6 @@ public class JobListingResponse {
     String categoryName;
     String postingDate;
     String jobType;
+    String salary;
+    String companyName;
 }

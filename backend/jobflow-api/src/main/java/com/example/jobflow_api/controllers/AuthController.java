@@ -1,18 +1,18 @@
 package com.example.jobflow_api.controllers;
 
+import com.example.jobflow_api.dtos.UserDTO;
 import com.example.jobflow_api.security.request.LoginRequest;
 import com.example.jobflow_api.security.request.SignupRequest;
 import com.example.jobflow_api.security.response.MessageResponse;
 import com.example.jobflow_api.service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -35,8 +35,23 @@ public class AuthController {
     }
 
     @PostMapping("/public/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
-        return authService.authenticateUser(loginRequest);
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+        return authService.authenticateUser(loginRequest, response);
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<?> logoutUser(HttpServletResponse response) {
+        return authService.logoutUser(response);
+    }
+
+    @GetMapping("/current-user")
+    public ResponseEntity<?> getCurrentUserDetails(HttpServletRequest request){
+        UserDTO userDto = authService.getCurrentUserDto(request);
+        if(userDto != null){
+            return ResponseEntity.ok(userDto);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body("User is not authorized");
+
+    }
 }

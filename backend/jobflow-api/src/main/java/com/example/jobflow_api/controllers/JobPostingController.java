@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RequiredArgsConstructor
 @RestController
@@ -34,7 +35,11 @@ public class JobPostingController {
 
     @GetMapping("/{id}")
     public ResponseEntity<JobPostingDTO> getJobPost(@PathVariable String id) {
-        return new ResponseEntity<>(jobPostingService.getJobPostById(id), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(jobPostingService.getJobPostById(id), HttpStatus.OK);
+        } catch (ResponseStatusException ex) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
     }
 

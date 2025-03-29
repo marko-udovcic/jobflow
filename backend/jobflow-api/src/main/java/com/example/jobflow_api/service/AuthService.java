@@ -1,9 +1,12 @@
 package com.example.jobflow_api.service;
 
+import com.example.jobflow_api.dtos.UserDTO;
 import com.example.jobflow_api.security.request.LoginRequest;
 import com.example.jobflow_api.security.request.SignupRequest;
 import com.example.jobflow_api.security.response.MessageResponse;
 import com.example.jobflow_api.security.services.UserDetailsImpl;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
@@ -16,7 +19,11 @@ public interface AuthService {
 
     Map<String, Object> validateSignupRequest(SignupRequest signupRequest, BindingResult bindingResult);
 
-    ResponseEntity<?> authenticateUser(LoginRequest loginRequest);
+    ResponseEntity<?> authenticateUser(LoginRequest loginRequest, HttpServletResponse response);
 
    UserDetailsImpl getCurrentUserDetails();
+
+    ResponseEntity<?> logoutUser(HttpServletResponse response);
+
+    UserDTO getCurrentUserDto(HttpServletRequest request);
 }

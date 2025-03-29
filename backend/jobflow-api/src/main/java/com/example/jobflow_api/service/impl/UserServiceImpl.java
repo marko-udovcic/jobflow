@@ -8,22 +8,29 @@ import com.example.jobflow_api.models.JobPosting;
 import com.example.jobflow_api.models.enums.Status;
 import com.example.jobflow_api.repositories.UserRepository;
 import com.example.jobflow_api.security.jwt.JwtUtils;
+import com.example.jobflow_api.security.services.UserDetailsImpl;
+import com.example.jobflow_api.service.AuthService;
 import com.example.jobflow_api.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService {
-    @Autowired
-    UserRepository userRepository;
+@RequiredArgsConstructor
 
-    @Autowired
-    JwtUtils jwtUtils;
+public class UserServiceImpl implements UserService {
+    private final UserRepository userRepository;
+    private final JwtUtils jwtUtils;
+    private final ModelMapper modelMapper;
 
     private ResponseEntity<?> findUserAndReturnResponse(String id) {
         Optional<AppUser> user = userRepository.findById(id);
@@ -39,19 +46,17 @@ public class UserServiceImpl implements UserService {
     public UserDTO getUserById(String id) {
         AppUser user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User with ID " + id + " not found"));
-        return convertToDto(user);
+
+        return modelMapper.map(user,UserDTO.class);
     }
 
+    @Transactional
     @Override
     public AppUser updateUser(UpdateCompanyRequest updateCompanyRequest, HttpServletRequest request) {
         try {
-
-            String jwtToken = jwtUtils.getJwtFromHeader(request);
-            String email = jwtUtils.getEmailFromJwtToken(jwtToken);
-
-            if (email == null || email.isEmpty()) {
-                throw new RuntimeException("Email not found in the token");
-            }
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            String email = userDetails.getEmail();
 
             Optional<AppUser> userOptional = userRepository.findByEmail(email);
 
@@ -104,14 +109,5 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.ok("User profile updated successfully.");
     }
 
-    private UserDTO convertToDto(AppUser user) {
-        return new UserDTO(user.getId(),
-                user.getEmail(),
-                user.getRole(),
-                user.getCompanyStatus(),
-                user.getCompanyName(),
-                user.getPhoneNumber(),
-                user.getAboutCompany(),
-                user.getCreatedAt());
-    }
+
 }
