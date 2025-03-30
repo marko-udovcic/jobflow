@@ -1,10 +1,18 @@
 import Input from "./Input";
 import ErrorSpan from "./ErrorSpan";
 import PropTypes from "prop-types";
-function InputLabelField({ name, labelName, type, formik, showError, inputVariant = "primary" }) {
+function InputLabelField({
+  name,
+  labelName,
+  type,
+  formik,
+  showError,
+  inputVariant = "primary",
+  placeholder = "",
+}) {
   return (
     <div className="mb-4">
-      <label htmlFor={name} className="ml-2 block mb-1">
+      <label htmlFor={name} className="mb-1 ml-2 block">
         <ErrorSpan name={name} labelName={labelName} showError={showError} />
       </label>
 
@@ -17,6 +25,7 @@ function InputLabelField({ name, labelName, type, formik, showError, inputVarian
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         error={formik.touched[name] && formik.errors[name]}
+        placeholder={placeholder}
       />
     </div>
   );

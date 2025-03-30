@@ -12,8 +12,8 @@ const variants = {
     duration-500 ease-in-out color-black hover:text-white hover:bg-transparent hover:border-1
     hover:border-[#edcd59] px-4 py-2 font-semibold focus:outline-none`,
 
-  danger: `text-red-500 p-2 mt-4 rounded lg:ml-4 transition duration-500 ease-in-out lg:hover:bg-red-700
-            lg:hover:text-white`,
+  danger: `text-red-500 p-2 rounded lg:ml-4 transition duration-500 ease-in-out lg:hover:bg-red-700
+            lg:hover:text-white mt-4`,
 };
 
 export default function Button({ children, onClick, className, disabled, variant = "none", type }) {
