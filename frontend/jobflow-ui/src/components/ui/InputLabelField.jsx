@@ -38,5 +38,6 @@ InputLabelField.propTypes = {
   formik: PropTypes.object.isRequired,
   showError: PropTypes.func.isRequired,
   inputVariant: PropTypes.string,
+  placeholder: PropTypes.string,
 };
 export default InputLabelField;
