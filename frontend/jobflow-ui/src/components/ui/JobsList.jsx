@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import Card from "./Card";
 import JobCardContent from "./JobCardContent";
+import PropTypes from "prop-types";
 function JobsList({ jobList, cardVariant, isAuthUser }) {
   return (
     <div className="mt-5">
@@ -20,4 +21,15 @@ function JobsList({ jobList, cardVariant, isAuthUser }) {
     </div>
   );
 }
+
+JobsList.propTypes = {
+  jobList: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    }),
+  ).isRequired,
+  cardVariant: PropTypes.string.isRequired,
+  isAuthUser: PropTypes.bool.isRequired,
+};
+
 export default JobsList;

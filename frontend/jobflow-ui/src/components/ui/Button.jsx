@@ -15,6 +15,7 @@ const variants = {
   danger: `text-red-500 p-2 rounded lg:ml-4 transition duration-500 ease-in-out lg:hover:bg-red-700
             lg:hover:text-white mt-4`,
   disabled: `bg-gray-400 cursor-not-allowed rounded-[30px] py-2 px-2 text-white font-semibold`,
+  cancel: `bg-[#F6F6F6] text-[#0E0E0E] rounded-[30px] font-semibold`,
 };
 
 export default function Button({ children, onClick, className, disabled, variant = "none", type }) {
