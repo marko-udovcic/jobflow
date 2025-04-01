@@ -11,3 +11,8 @@ export async function addDigitalCv(data) {
   const response = await axiosInstance.post(`/digital-cv`, data);
   return response.data;
 }
+
+export async function getDigitalCvByUserId(userId) {
+  const response = await axiosInstance.get(`/digital-cv/${userId}`);
+  return response.data;
+}
