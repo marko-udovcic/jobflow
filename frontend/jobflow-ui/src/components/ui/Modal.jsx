@@ -1,4 +1,5 @@
 import { createPortal } from "react-dom";
+import PropTypes from "prop-types";
 
 function Modal({ children, isOpen, onClose, showCloseBtn }) {
   if (!isOpen) return null;
@@ -19,5 +20,11 @@ function Modal({ children, isOpen, onClose, showCloseBtn }) {
     document.body,
   );
 }
+Modal.propTypes = {
+  children: PropTypes.node.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  showCloseBtn: PropTypes.bool,
+};
 
 export default Modal;

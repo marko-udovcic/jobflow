@@ -72,8 +72,10 @@ JobCardContent.propTypes = {
     location: PropTypes.string.isRequired,
     categoryName: PropTypes.string.isRequired,
     salary: PropTypes.string.isRequired,
+    postingDate: PropTypes.string.isRequired,
   }).isRequired,
   variant: PropTypes.string.isRequired,
+  isAuthUser: PropTypes.bool.isRequired,
 };
 
 export default JobCardContent;

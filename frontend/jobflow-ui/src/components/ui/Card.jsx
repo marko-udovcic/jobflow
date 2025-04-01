@@ -5,8 +5,16 @@ const variants = {
       rounded-[20px]`,
 };
 
+import PropTypes from "prop-types";
+
 function Card({ children, variant = "primary", className }) {
   return <div className={`${variants[variant]} ${className}`}>{children}</div>;
 }
+
+Card.propTypes = {
+  children: PropTypes.node.isRequired,
+  variant: PropTypes.oneOf(["primary", "secondary"]),
+  className: PropTypes.string,
+};
 
 export default Card;

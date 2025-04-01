@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import PropTypes from "prop-types";
 
 function UserLogo({ user = {}, isJobPostPage = false }) {
   const currentUserName = user?.companyName;
@@ -22,5 +23,13 @@ function UserLogo({ user = {}, isJobPostPage = false }) {
     </>
   );
 }
+UserLogo.propTypes = {
+  user: PropTypes.shape({
+    companyName: PropTypes.string,
+    email: PropTypes.string,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  }),
+  isJobPostPage: PropTypes.bool,
+};
 
 export default UserLogo;

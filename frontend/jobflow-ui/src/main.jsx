@@ -12,30 +12,54 @@ import Applications from "./pages/Applications.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import AccountTypeChooser from "./pages/AccountTypeChooser.jsx";
+import ExploreJobs from "./pages/ExploreJobs.jsx";
+import JobPostDetails from "./pages/JobPostDetails.jsx";
+import UpdateCv from "./pages/UpdateCv.jsx";
+import ErrorPage from "./pages/ErrorPage.jsx";
+import MainLayout from "./pages/MainLayout.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <ErrorPage />,
     children: [
       {
-        path: "/worker/profile",
-        element: <WorkerProfile />,
-      },
-      {
-        path: "/employer/profile",
-        element: <EmployerProfile />,
-      },
-      {
-        path: "/admin/dashboard",
-        element: <AdminDashboard />,
-      },
-      {
-        path: "/post-job",
-        element: <PostJob />,
-      },
-      {
-        path: "/applications",
-        element: <Applications />,
+        path: "/",
+        element: <MainLayout />,
+        children: [
+          {
+            path: "/worker/profile/:id?",
+            element: <WorkerProfile />,
+          },
+          {
+            path: "/employer/profile/:id?",
+            element: <EmployerProfile />,
+          },
+          {
+            path: "/admin/dashboard",
+            element: <AdminDashboard />,
+          },
+          {
+            path: "/employer/post-job",
+            element: <PostJob />,
+          },
+          {
+            path: "/applications",
+            element: <Applications />,
+          },
+          {
+            path: "/explore-jobs",
+            element: <ExploreJobs />,
+          },
+          {
+            path: "/job-post-details/:id",
+            element: <JobPostDetails />,
+          },
+          {
+            path: "/worker/update-cv",
+            element: <UpdateCv />,
+          },
+        ],
       },
     ],
   },

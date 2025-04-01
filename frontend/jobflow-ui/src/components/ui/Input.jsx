@@ -3,12 +3,15 @@ const variants = {
   textarea: ` bg-[var(--color-input-bg)] border-color-primary w-full p-2 border rounded-[1rem] focus:ring-1 focus:ring-[#0e0e0e] focus:outline-none min-h-[5rem]`,
   fullHeightTextarea: `bg-[var(--color-input-bg)] border-color-primary w-full p-2 border rounded-[1rem] focus:ring-1 focus:ring-[#0e0e0e] focus:outline-none min-h-[10rem]`,
 };
-function Input({ type, className, variant, name, value, onChange }) {
+import PropTypes from "prop-types";
+
+function Input({ type, className, variant, name, value, onChange, placeholder = "" }) {
   return (
     <>
       {type === "textarea" ? (
         <textarea
           name={name}
+          placeholder={placeholder}
           className={`${className} ${variants[variant]}`}
           value={value}
           onChange={onChange}
@@ -16,6 +19,7 @@ function Input({ type, className, variant, name, value, onChange }) {
       ) : (
         <input
           name={name}
+          placeholder={placeholder}
           value={value}
           onChange={onChange}
           type={type}
@@ -25,5 +29,15 @@ function Input({ type, className, variant, name, value, onChange }) {
     </>
   );
 }
+
+Input.propTypes = {
+  type: PropTypes.string.isRequired,
+  className: PropTypes.string,
+  variant: PropTypes.oneOf(["primary", "textarea", "fullHeightTextarea"]).isRequired,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
+};
 
 export default Input;

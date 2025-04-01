@@ -16,7 +16,6 @@ import com.example.jobflow_api.service.AuthService;
 import com.example.jobflow_api.service.JobApplicationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.message.Message;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +26,6 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -143,6 +141,12 @@ public class JobApplicationServiceImpl implements JobApplicationService {
         return applications.stream()
                 .map(jobApplication -> {
                     JobApplicationForWorkerDTO jobApplicationForWorkerDTO = modelMapper.map(jobApplication, JobApplicationForWorkerDTO.class);
+
+                    String companyName = jobApplication.getJobPosting().getEmployer().getCompanyName();
+                    String jobPostingId= jobApplication.getJobPosting().getId();
+
+                    jobApplicationForWorkerDTO.setCompanyName(companyName);
+                    jobApplicationForWorkerDTO.setJobPostingId(jobPostingId);
 
                     List<JobMessageResponse> messages = jobApplication.getMessages().stream()
                             .map(jobMessage -> {

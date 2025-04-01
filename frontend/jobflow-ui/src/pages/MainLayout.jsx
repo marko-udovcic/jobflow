@@ -1,12 +1,10 @@
+// MainLayout.jsx
 import { Outlet, useLocation } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import { useCurrentUser } from "./features/auth/hooks/useCurrentUser";
-function App() {
-  const { isLoading } = useCurrentUser();
+import Navbar from "../components/Navbar";
+
+function MainLayout() {
   const location = useLocation();
   const hideNavbarPaths = ["/worker/update-cv"];
-
-  if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className="app-container">
@@ -16,4 +14,4 @@ function App() {
   );
 }
 
-export default App;
+export default MainLayout;
