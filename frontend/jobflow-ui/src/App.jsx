@@ -1,18 +1,16 @@
-import { Outlet, useLocation } from "react-router-dom";
-import Navbar from "./components/Navbar";
+import { Outlet } from "react-router-dom";
 import { useCurrentUser } from "./features/auth/hooks/useCurrentUser";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function App() {
   const { isLoading } = useCurrentUser();
-  const location = useLocation();
-  const hideNavbarPaths = ["/worker/update-cv"];
-
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <div className="app-container">
-      {!hideNavbarPaths.includes(location.pathname) && <Navbar />}
+    <>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
       <Outlet />
-    </div>
+    </>
   );
 }
 
