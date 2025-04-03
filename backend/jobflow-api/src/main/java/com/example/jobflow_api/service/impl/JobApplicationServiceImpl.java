@@ -90,6 +90,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
             JobApplicationDetailsForEmployerDTO dto = modelMapper.map(application, JobApplicationDetailsForEmployerDTO.class);
             dto.setEmail(application.getWorker().getEmail());
             dto.setWorkerId(application.getWorker().getId());
+            dto.setJobApplicationId(application.getId());
             return dto;
         }).toList();
 
