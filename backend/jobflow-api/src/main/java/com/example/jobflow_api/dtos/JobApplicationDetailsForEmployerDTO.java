@@ -10,4 +10,5 @@ public class JobApplicationDetailsForEmployerDTO {
     private String applicationDate;
     private String content;
     private String jobPosition;
+    private String jobApplicationId;
 }

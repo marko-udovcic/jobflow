@@ -26,12 +26,12 @@ function Open({ children, opens: opensWindowName }) {
 }
 
 function Window({ children, name }) {
-  const { openName, close } = useContext(ModalContext);
+  const { openName } = useContext(ModalContext);
   if (name !== openName) return null;
 
   return createPortal(
     <div className="fixed inset-0 z-[1000] backdrop-blur-[8px]">
-      <div className="bg-secondary fixed top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2 transform rounded-lg p-6 lg:w-1/2">
+      <div className="fixed top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2 transform rounded-lg bg-white p-6 lg:w-1/2">
         <div>{children}</div>
       </div>
     </div>,

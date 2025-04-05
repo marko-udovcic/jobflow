@@ -36,7 +36,7 @@ public class JobApplicationController {
         return jobApplicationService.getApplicationsByJobId(jobId,pageable);
     }
 
-    @PutMapping("/")
+    @PutMapping
     public ResponseEntity<?> updateJobApplication(
             @RequestBody JobApplicationUpdateRequest jobApplicationUpdateRequest
             ){
