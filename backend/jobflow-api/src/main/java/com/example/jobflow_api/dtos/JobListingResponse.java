@@ -12,4 +12,5 @@ public class JobListingResponse {
     String jobType;
     String salary;
     String companyName;
+    String employerId;
 }
