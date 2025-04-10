@@ -3,10 +3,9 @@ package com.example.jobflow_api;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-//@SpringBootApplication
-@SpringBootApplication(scanBasePackages = "com.example.jobflow_api")
-public class JobflowApiApplication {
 
+@SpringBootApplication
+public class JobflowApiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(JobflowApiApplication.class, args);
