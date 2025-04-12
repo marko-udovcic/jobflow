@@ -11,6 +11,7 @@ function Input({ type, className, variant, name, value, onChange, placeholder = 
       {type === "textarea" ? (
         <textarea
           name={name}
+          id={name}
           placeholder={placeholder}
           className={`${className} ${variants[variant]}`}
           value={value}
@@ -19,6 +20,7 @@ function Input({ type, className, variant, name, value, onChange, placeholder = 
       ) : (
         <input
           name={name}
+          id={name}
           placeholder={placeholder}
           value={value}
           onChange={onChange}

@@ -8,9 +8,9 @@ const variants = {
     rounded-[30px] self-center focus:outline-none transition-all px-4 py-2 hover:bg-gray-800
     duration-200 ease-in-out`,
 
-  secondary: `text-gray-700 bg-[#edcd59] rounded-[30px] hover:bg-gray-200 active:bg-gray-300 transition 
+  secondary: `text-black bg-[#edcd59] rounded-[30px] hover:bg-gray-200 active:bg-gray-300 transition 
     duration-500 ease-in-out color-black hover:text-white hover:bg-transparent hover:border-1
-    hover:border-[#edcd59] px-4 py-2 font-semibold focus:outline-none`,
+    hover:border-[#edcd59] px-4 py-2 font-medium focus:outline-none border border-transparent`,
 
   danger: `text-red-500 p-2 rounded lg:ml-4 transition duration-500 ease-in-out lg:hover:bg-red-700
             lg:hover:text-white mt-4`,

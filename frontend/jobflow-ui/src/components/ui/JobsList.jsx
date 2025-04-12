@@ -2,9 +2,9 @@ import { NavLink } from "react-router-dom";
 import Card from "./Card";
 import JobCardContent from "./JobCardContent";
 import PropTypes from "prop-types";
-function JobsList({ jobList, cardVariant, isAuthUser }) {
+function JobsList({ jobList, cardVariant, isAuthUser, className }) {
   return (
-    <div className="mt-5">
+    <div className={`mt-5 ${className}`}>
       {jobList === undefined || jobList.length === 0 ? (
         <p className="text-center text-2xl">No jobs found</p>
       ) : (
@@ -30,6 +30,7 @@ JobsList.propTypes = {
   ).isRequired,
   cardVariant: PropTypes.string.isRequired,
   isAuthUser: PropTypes.bool.isRequired,
+  className: PropTypes.string,
 };
 
 export default JobsList;
