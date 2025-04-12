@@ -11,6 +11,7 @@ import { initialValues } from "../schema/languages";
 import { useFormWithStorage } from "../hooks/useFormWithStorage";
 import Button from "../../../components/ui/Button";
 import CvReusableList from "./CvReusableList";
+import { useStoredData } from "../hooks/useStoredData";
 
 const langugagesLevelOptions = [
   { value: "Basic" },
@@ -19,16 +20,18 @@ const langugagesLevelOptions = [
   { value: "Native Speaker" },
 ];
 
-function LanguagesForm({ onUpdate }) {
+function LanguagesForm({ onUpdate, storedLanguages }) {
   const [isOpen, setIsOpen] = useState(true);
   const localStorageKey = "languagesList";
   const {
     formik,
     removeItem: removeLanguages,
     list: languagesList,
+    setList,
     showError,
   } = useFormWithStorage(localStorageKey, languagesSchema, onUpdate, initialValues);
 
+  useStoredData(localStorageKey, storedLanguages, setList);
   const renderLanguageItem = (language) => {
     return `${language.languages} (${language.languagesLevel})`;
   };
@@ -79,6 +82,7 @@ function LanguagesForm({ onUpdate }) {
 }
 LanguagesForm.propTypes = {
   onUpdate: PropTypes.func.isRequired,
+  storedLanguages: PropTypes.array,
 };
 
 export default LanguagesForm;
