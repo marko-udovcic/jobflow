@@ -22,3 +22,26 @@ export async function getJobPostingById(jobPostingId) {
   const response = await axiosInstance.get(`/job-postings/${jobPostingId}`);
   return response.data;
 }
+
+export async function deleteJobPosting(id) {
+  console.log("usa san u fjukciju", id);
+  const response = await axiosInstance.delete(`/job-postings/${id}`);
+  return response.data;
+}
+
+export async function getExploreJobPostings({ title, location, page = 0, size = 10 }) {
+  const response = await axiosInstance.get(
+    `/job-postings/search?title=${title}&location=${location}&page=${page}&size=${size}`,
+  );
+  return response.data;
+}
+
+export async function getSuggestLocations(prefix) {
+  console.log("prefix u servicu", prefix);
+  const response = await axiosInstance.get(`/job-postings/suggest-locations?prefix=${prefix}`);
+  return response.data;
+}
+export async function getSuggestJobTitles(prefix) {
+  const response = await axiosInstance.get(`/job-postings/suggest-job-titles?prefix=${prefix}`);
+  return response.data;
+}
