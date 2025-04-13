@@ -17,7 +17,11 @@ function JobHeader({ title = "", date = "", user = {}, jobPostingId }) {
 
   const handleDeleteJobPost = () => {
     deleteJobPost(jobPostingId);
-    navigate("/employer/profile", { replace: true });
+    if (!isAuthUser) {
+      navigate(`/employer/profile/${user?.id}`, { replace: true });
+    } else {
+      navigate("/employer/profile", { replace: true });
+    }
   };
 
   return (

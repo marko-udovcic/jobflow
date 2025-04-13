@@ -22,7 +22,7 @@ function ApplyJobModal({ jobPostingId }) {
 
   const { formik, showError } = useApplyForm(handleSubmit);
   return (
-    <div className="rounded-2xl bg-white p-4 shadow-lg">
+    <div className="rounded-2xl bg-white p-4">
       <Form onSubmit={formik.handleSubmit}>
         <InputLabelField
           name="jobPosition"
