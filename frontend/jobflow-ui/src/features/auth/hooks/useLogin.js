@@ -12,13 +12,11 @@ export function useLogin() {
     error,
   } = useMutation({
     mutationFn: loginUserApi,
+
     onSuccess: ({ roles }) => {
       const role = roles[0];
       setUser({});
       redirectUser(role);
-    },
-    onError: (err) => {
-      console.error(err);
     },
   });
 
