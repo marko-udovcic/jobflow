@@ -1,3 +1,4 @@
+import { useParams } from "react-router-dom";
 import PersonalInfoForm from "../features/update-cv/components/PersonalInfoForm";
 import EducationForm from "../features/update-cv/components/EducationForm";
 import ExperienceForm from "../features/update-cv/components/ExperienceForm";
@@ -9,42 +10,78 @@ import AdditionalInfoForm from "../features/update-cv/components/AdditionalInfoF
 import Logo from "../components/ui/Logo";
 import { useCvForm } from "../features/update-cv/hooks/useCvForm";
 import { useCreateCv } from "../features/update-cv/hooks/useCreateCv";
+import { useDigitalCv } from "../features/worker-profile/hooks/useDigitalCv";
+import { useUpdateCv } from "../features/update-cv/hooks/useUpdateCv";
 function UpdateCv() {
-  const { cvData, handleUpdate, isFormComplete, transformDataForDatabase } = useCvForm();
-  const { createCV, isLoading } = useCreateCv();
+  const { workerId } = useParams();
+  const isUpdateCv = workerId !== undefined;
+  const { digitalCv, isLoading } = useDigitalCv(workerId);
+
+  const { handleUpdate, isFormComplete, transformDataForDatabase } = useCvForm();
+  const { createCV } = useCreateCv();
+  const { updateCV } = useUpdateCv();
   const handleSubmit = () => {
     const data = transformDataForDatabase();
-    console.log("ispis current cvData", cvData);
-    console.log("ispis data", data);
 
-    createCV(data);
+    if (isUpdateCv) {
+      updateCV(data);
+    } else {
+      createCV(data);
+    }
+
+    localStoqrage.clear();
   };
+
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className="overflow-hidden p-2 lg:p-0">
       <div className="my-5 flex flex-col items-center justify-center p-2">
         <Logo />
-        <p className="mt-5 text-[#BC0A0A] lg:w-[70%]">
-          Dear Candidate,
-          <br />
-          Please complete your CV on this page.
-          <br />
-          A completed CV is essential as it is automatically attached to every job application,
-          saving time for both you and us. Without a fully completed CV, you will not be able to
-          apply for job opportunities.
-          <br />
-          Thank you for your cooperation!
-        </p>
+        {!isUpdateCv && (
+          <p className="mt-5 text-[#BC0A0A] lg:w-[70%]">
+            Dear Candidate ,
+            <br />
+            Please complete your CV on this page.
+            <br />
+            A completed CV is essential as it is automatically attached to every job application,
+            saving time for both you and us. Without a fully completed CV, you will not be able to
+            apply for job opportunities.
+            <br />
+            Thank you for your cooperation!
+          </p>
+        )}
       </div>
 
       <div className="mx-auto mt-5 w-full xl:w-[70%]">
-        <PersonalInfoForm onUpdate={(data) => handleUpdate("personalInfo", data)} />
-        <EducationForm onUpdate={(data) => handleUpdate("education", data)} />
-        <ExperienceForm onUpdate={(data) => handleUpdate("experience", data)} />
-        <LanguagesForm onUpdate={(data) => handleUpdate("languages", data)} />
-        <ComputerSkillsForm onUpdate={(data) => handleUpdate("computerSkills", data)} />
-        <OtherSkillsForm onUpdate={(data) => handleUpdate("otherSkills", data)} />
-        <AdditionalInfoForm onUpdate={(data) => handleUpdate("additionalInformation", data)} />
+        <PersonalInfoForm
+          onUpdate={(data) => handleUpdate("personalInfo", data)}
+          cvData={digitalCv}
+        />
+        <EducationForm
+          onUpdate={(data) => handleUpdate("education", data)}
+          storedEducation={digitalCv?.education}
+        />
+        <ExperienceForm
+          onUpdate={(data) => handleUpdate("experience", data)}
+          storedExperience={digitalCv?.workExperience}
+        />
+        <LanguagesForm
+          onUpdate={(data) => handleUpdate("languages", data)}
+          storedLanguages={digitalCv?.languages}
+        />
+        <ComputerSkillsForm
+          onUpdate={(data) => handleUpdate("computerSkills", data)}
+          storedComputerSkills={digitalCv?.computerSkills}
+        />
+        <OtherSkillsForm
+          onUpdate={(data) => handleUpdate("otherSkills", data)}
+          storedOtherSkills={digitalCv?.otherSkills}
+        />
+        <AdditionalInfoForm
+          onUpdate={(data) => handleUpdate("additionalInformation", data)}
+          storedAdditionalInfo={digitalCv?.additionalInformation}
+        />
 
         <div className="mt-10 flex justify-center md:mt-5">
           <Button
