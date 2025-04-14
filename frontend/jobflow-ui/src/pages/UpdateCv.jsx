@@ -29,7 +29,7 @@ function UpdateCv() {
       createCV(data);
     }
 
-    localStoqrage.clear();
+    localStorage.clear();
   };
 
   if (isLoading) return <div>Loading...</div>;
