@@ -9,7 +9,7 @@ function Education({ education = [{}] }) {
       <HeadingSection title="Education" />
       {education.map((item, index) => (
         <FlexRowItem key={index} leftItem={item.dateRange}>
-          <RightItem title={item.degree} subtitle={"University of computer science, New York"} />
+          <RightItem title={item.degree} subtitle={item.university || "Not defined"} />
         </FlexRowItem>
       ))}
     </div>

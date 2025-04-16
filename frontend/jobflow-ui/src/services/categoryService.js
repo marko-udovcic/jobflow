@@ -11,3 +11,18 @@ export async function getCategories() {
   const response = await axiosInstance.get(`/categories`);
   return response.data;
 }
+
+export async function addCategory(data) {
+  const response = await axiosInstance.post(`/categories`, data);
+  return response.data;
+}
+
+export async function updateCategory(id, data) {
+  const response = await axiosInstance.put(`/categories/${id}`, data);
+  return response.data;
+}
+
+export async function deleteCategory(id) {
+  const response = await axiosInstance.delete(`/categories/${id}`);
+  return response.data;
+}

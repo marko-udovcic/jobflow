@@ -3,6 +3,7 @@ const variants = {
       rounded-[20px]`,
   secondary: `bg-white text-black
       rounded-[20px]`,
+  none: "",
 };
 
 import PropTypes from "prop-types";

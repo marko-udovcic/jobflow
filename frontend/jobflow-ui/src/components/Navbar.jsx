@@ -20,8 +20,7 @@ function Navbar() {
       </button>
 
       <div
-        className={`absolute top-16 left-0 w-full p-5 shadow-md md:static md:w-auto md:p-0 md:shadow-none
-          ${isOpen ? "block" : "hidden"} z-100 md:flex md:gap-5 bg-[var(--color-body-bg)]`}
+        className={`absolute top-16 left-0 w-full p-5 shadow-md md:static md:w-auto md:p-0 md:shadow-none ${isOpen ? "block" : "hidden"} z-100 bg-[var(--color-body-bg)] md:flex md:gap-5`}
       >
         <ul className="flex flex-col gap-5 md:flex-row">
           {notAdmin && (
@@ -38,6 +37,16 @@ function Navbar() {
             <>
               <li>
                 <NavLink to="/applications">Applications</NavLink>
+              </li>
+              <li>
+                <NavLink to="/explore-jobs">Explore Jobs</NavLink>
+              </li>
+            </>
+          )}
+          {currentUser?.role === "ADMIN" && (
+            <>
+              <li>
+                <NavLink to="/admin/dashboard">Dashboard</NavLink>
               </li>
               <li>
                 <NavLink to="/explore-jobs">Explore Jobs</NavLink>

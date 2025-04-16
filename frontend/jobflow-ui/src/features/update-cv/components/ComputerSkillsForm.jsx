@@ -6,17 +6,20 @@ import { initialValues } from "../schema/skillsSchema";
 import ExpandableSection from "./ui/ExpandableSection";
 import Form from "../../../components/ui/Form";
 import Button from "../../../components/ui/Button";
+import { useStoredData } from "../hooks/useStoredData";
 import PropTypes from "prop-types";
 
-function ComputerSkills({ onUpdate }) {
-  const localStorageKey = "skillsList";
+function ComputerSkills({ onUpdate, storedComputerSkills }) {
+  const localStorageKey = "computerSkillList";
   const {
     formik,
     removeItem: removeComputerSkill,
     list: skillsList,
+    setList,
     showError,
   } = useFormWithStorage(localStorageKey, computerSkillsSchema, onUpdate, initialValues);
 
+  useStoredData(localStorageKey, storedComputerSkills, setList);
   const renderItem = (skill) => {
     return `${skill.skillName}`;
   };
@@ -49,6 +52,7 @@ function ComputerSkills({ onUpdate }) {
 }
 ComputerSkills.propTypes = {
   onUpdate: PropTypes.func.isRequired,
+  storedComputerSkills: PropTypes.array,
 };
 
 export default ComputerSkills;

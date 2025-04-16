@@ -7,16 +7,19 @@ import ExpandableSection from "./ui/ExpandableSection";
 import Form from "../../../components/ui/Form";
 import Button from "../../../components/ui/Button";
 import PropTypes from "prop-types";
+import { useStoredData } from "../hooks/useStoredData";
 
-function AdditionalInfoForm({ onUpdate }) {
+function AdditionalInfoForm({ onUpdate, storedAdditionalInfo }) {
   const localStorageKey = "additionalInfoList";
   const {
     formik,
     removeItem,
     list: additionalInfoList,
+    setList,
     showError,
   } = useFormWithStorage(localStorageKey, additionalInfoSchema, onUpdate, initialValues);
 
+  useStoredData(localStorageKey, storedAdditionalInfo, setList);
   const renderItem = (item) => {
     return `${item.additionalInfo}`;
   };
@@ -46,6 +49,7 @@ function AdditionalInfoForm({ onUpdate }) {
 
 AdditionalInfoForm.propTypes = {
   onUpdate: PropTypes.func.isRequired,
+  storedAdditionalInfo: PropTypes.array,
 };
 
 export default AdditionalInfoForm;

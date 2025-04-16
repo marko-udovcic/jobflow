@@ -10,16 +10,18 @@ import { experienceSchema } from "../schema/experienceSchema";
 import { initialValues } from "../schema/experienceSchema";
 import FormRowFields from "../../../components/ui/FormRowFields";
 import ToggleButton from "./ToggleButton";
-function ExperienceForm({ onUpdate }) {
+import { useStoredData } from "../hooks/useStoredData";
+function ExperienceForm({ onUpdate, storedExperience }) {
   const [isOpen, setIsOpen] = useState(true);
   const localStorageKey = "experienceList";
   const {
     formik,
     removeItem: removeExperience,
     list: experienceList,
+    setList,
     showError,
   } = useFormWithStorage(localStorageKey, experienceSchema, onUpdate, initialValues);
-
+  useStoredData(localStorageKey, storedExperience, setList);
   const renderExperienceItem = (experience) => {
     return `${experience.jobTitle} , ${experience.companyName} (${experience.dateRange})`;
   };
@@ -73,7 +75,7 @@ function ExperienceForm({ onUpdate }) {
               type="text"
               formik={formik}
               showError={showError}
-              placeholder="Start Date Year - End Date Year( January 2024 - January 2025)"
+              placeholder="e.g( January 2024 - January 2025) or (January 2024 - Present)"
             />
             <InputLabelField
               name="summary"
@@ -97,6 +99,7 @@ function ExperienceForm({ onUpdate }) {
 }
 ExperienceForm.propTypes = {
   onUpdate: PropTypes.func.isRequired,
+  storedExperience: PropTypes.array,
 };
 
 export default ExperienceForm;

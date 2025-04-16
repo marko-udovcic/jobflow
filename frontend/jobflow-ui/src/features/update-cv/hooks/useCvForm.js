@@ -17,7 +17,7 @@ export function useCvForm() {
   };
 
   let isFormComplete =
-    Object.keys(cvData.personalInfo).length > 0 &&
+    Object.keys(cvData?.personalInfo).length > 0 &&
     cvData.education.length > 0 &&
     cvData.experience.length > 0 &&
     cvData.languages.length > 0 &&

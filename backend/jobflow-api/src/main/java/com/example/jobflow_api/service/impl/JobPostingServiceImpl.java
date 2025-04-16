@@ -10,6 +10,7 @@ import com.example.jobflow_api.models.JobPosting;
 import com.example.jobflow_api.repositories.CategoryRepository;
 import com.example.jobflow_api.repositories.JobPostingRepository;
 import com.example.jobflow_api.repositories.UserRepository;
+import com.example.jobflow_api.service.JobPostingElasticsearchService;
 import com.example.jobflow_api.service.JobPostingService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class JobPostingServiceImpl implements JobPostingService {
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final JobPostingElasticsearchService jobPostingElasticsearchService;
 
     @Override
     @Transactional
@@ -45,6 +47,7 @@ public class JobPostingServiceImpl implements JobPostingService {
         jobPosting.setCategory(category);
 
         jobPosting = jobPostingRepository.save(jobPosting);
+        jobPostingElasticsearchService.indexJobPosting(jobPosting);
 
         return jobPosting;
     }
@@ -104,6 +107,7 @@ public class JobPostingServiceImpl implements JobPostingService {
         }
 
         jobPostingRepository.deleteById(id);
+        jobPostingElasticsearchService.deleteJobPosting(id);
 
         return ResponseEntity.noContent().build();
     }

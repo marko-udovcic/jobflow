@@ -15,9 +15,14 @@ function JobCardContent({ job, variant, isAuthUser }) {
     <>
       <div className="overflow-hidden p-7">
         <div className="mb-3 flex flex-row items-center justify-between">
-          <h2 className="bg-gold-color flex h-15 w-15 items-center justify-center rounded-full font-semibold text-black">
-            {firstLetter}
-          </h2>
+          {isAuthUser ? (
+            <h2 className="bg-gold-color flex h-15 w-15 items-center justify-center rounded-full font-semibold text-black">
+              {firstLetter}
+            </h2>
+          ) : (
+            <h2 className="font-medium text-white underline">{job.companyName}</h2>
+          )}
+
           <p className="bg-gold-color rounded-lg p-1 font-semibold text-black">{job.jobType}</p>
         </div>
 

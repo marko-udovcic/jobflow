@@ -15,7 +15,7 @@ function LoginForm() {
   return (
     <>
       {error && (
-        <div className="mt-[1rem] flex justify-center">
+        <div className="mt-[1rem] mb-[-3rem] flex justify-center">
           <span className="text-center text-[18px] text-red-600">{error.message}</span>
         </div>
       )}

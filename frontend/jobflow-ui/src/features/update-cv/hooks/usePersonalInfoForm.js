@@ -13,20 +13,21 @@ const validationSchema = Yup.object({
   nationality: Yup.string().required("Nationality is required"),
   phone: Yup.string().required("Phone Number is required"),
 });
-export const usePersonalInfoForm = (onSubmit) => {
+export const usePersonalInfoForm = (onSubmit, initialValues) => {
   return useFormik({
     initialValues: {
-      country: "",
-      city: "",
-      firstname: "",
-      lastname: "",
-      drivingLicence: "",
-      dateOfBirth: "",
-      nationality: "",
-      phone: "",
-      summary: "",
+      country: initialValues?.country || "",
+      city: initialValues?.city || "",
+      firstname: initialValues?.firstname || "",
+      lastname: initialValues?.lastname || "",
+      drivingLicence: initialValues?.drivingLicence || "",
+      dateOfBirth: initialValues?.dateOfBirth || "",
+      nationality: initialValues?.nationality || "",
+      phone: initialValues?.phone || "",
+      summary: initialValues?.summary || "",
     },
     validationSchema,
     onSubmit,
+    enableReinitialize: true,
   });
 };

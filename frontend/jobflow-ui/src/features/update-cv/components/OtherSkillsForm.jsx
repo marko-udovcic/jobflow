@@ -7,16 +7,19 @@ import ExpandableSection from "./ui/ExpandableSection";
 import Form from "../../../components/ui/Form";
 import Button from "../../../components/ui/Button";
 import PropTypes from "prop-types";
+import { useStoredData } from "../hooks/useStoredData";
 
-function OtherSkills({ onUpdate }) {
-  const localStorageKey = "skillsList";
+function OtherSkills({ onUpdate, storedOtherSkills }) {
+  const localStorageKey = "otherSkillsList";
   const {
     formik,
     removeItem: removeOtherSkill,
     list: otherSkillsList,
+    setList,
     showError,
   } = useFormWithStorage(localStorageKey, otherSkillsSchema, onUpdate, initialValues);
 
+  useStoredData(localStorageKey, storedOtherSkills, setList);
   const renderItem = (skill) => {
     return `${skill.skillName}`;
   };
@@ -49,6 +52,7 @@ function OtherSkills({ onUpdate }) {
 }
 OtherSkills.propTypes = {
   onUpdate: PropTypes.func.isRequired,
+  storedOtherSkills: PropTypes.array,
 };
 
 export default OtherSkills;

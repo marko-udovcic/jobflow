@@ -4,7 +4,7 @@ import { usePersonalInfoForm } from "../hooks/usePersonalInfoForm";
 import Button from "../../../components/ui/Button";
 import SectionTitle from "./SectionTitle";
 import ToggleButton from "./ToggleButton";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 const fieldGroups = [
@@ -26,14 +26,38 @@ const fieldGroups = [
   ],
 ];
 
-function PersonalInfoForm({ onUpdate }) {
+function PersonalInfoForm({ onUpdate, cvData }) {
+  const localStorageKey = "personalInfo";
   const [isOpen, setIsOpen] = useState(true);
   const showError = (name) => formik.errors[name] && formik.touched[name] && formik.errors[name];
+  const localStorageData = JSON.parse(localStorage.getItem(localStorageKey)) || {};
+
+  const initialData =
+    Object.keys(localStorageData).length > 0
+      ? localStorageData
+      : {
+          firstname: cvData?.firstname || "",
+          lastname: cvData?.lastname || "",
+          country: cvData?.country || "",
+          city: cvData?.city || "",
+          drivingLicence: cvData?.drivingLicence || "",
+          dateOfBirth: cvData?.dateOfBirth || "",
+          nationality: cvData?.nationality || "",
+          phone: cvData?.phone || "",
+          summary: cvData?.summary || "",
+        };
+
   const handleSubmit = (values) => {
+    localStorage.setItem(localStorageKey, JSON.stringify(values));
     onUpdate(values);
     setIsOpen(false);
   };
-  const formik = usePersonalInfoForm(handleSubmit);
+  const formik = usePersonalInfoForm(handleSubmit, initialData);
+
+  useEffect(() => {
+    onUpdate(initialData);
+  }, []);
+
   return (
     <div>
       <div
@@ -85,6 +109,7 @@ function PersonalInfoForm({ onUpdate }) {
 }
 PersonalInfoForm.propTypes = {
   onUpdate: PropTypes.func.isRequired,
+  cvData: PropTypes.object,
 };
 
 export default PersonalInfoForm;

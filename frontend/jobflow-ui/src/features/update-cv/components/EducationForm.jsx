@@ -9,16 +9,19 @@ import Form from "../../../components/ui/Form";
 import CvReusableList from "./CvReusableList";
 import SectionTitle from "./SectionTitle";
 import ToggleButton from "./ToggleButton";
-function EducationForm({ onUpdate }) {
+import { useStoredData } from "../hooks/useStoredData";
+function EducationForm({ onUpdate, storedEducation }) {
   const [isOpen, setIsOpen] = useState(true);
   const localStorageKey = "educationList";
   const {
     formik,
     removeItem: removeEducation,
     list: educationList,
+    setList,
     showError,
   } = useFormWithStorage(localStorageKey, educationSchema, onUpdate, initialValues);
 
+  useStoredData(localStorageKey, storedEducation, setList);
   const renderEducationItem = (education) => {
     return `${education.degree} (${education.dateRange})`;
   };
@@ -43,11 +46,20 @@ function EducationForm({ onUpdate }) {
           <Form onSubmit={formik.handleSubmit}>
             <InputLabelField
               name="degree"
-              labelName="Degree, School or University"
+              labelName="Degree"
               type="text"
               formik={formik}
               showError={showError}
-              placeholder="Degree, School or University"
+              placeholder="e.g. Bachelor of Science in Computer Science"
+            />
+
+            <InputLabelField
+              name="university"
+              labelName="University/School"
+              type="text"
+              formik={formik}
+              showError={showError}
+              placeholder="e.g. Faculty of Economics, Zagreb, Croatia"
             />
             <InputLabelField
               name="dateRange"
@@ -55,7 +67,7 @@ function EducationForm({ onUpdate }) {
               type="text"
               formik={formik}
               showError={showError}
-              placeholder="Start Date Year - End Date Year( January 2024 - January 2025)"
+              placeholder="e.g( January 2024 - January 2025) or (January 2024 - Present)"
             />
 
             <div className="flex justify-end">
@@ -71,6 +83,13 @@ function EducationForm({ onUpdate }) {
 }
 EducationForm.propTypes = {
   onUpdate: PropTypes.func.isRequired,
+  storedEducation: PropTypes.arrayOf(
+    PropTypes.shape({
+      degree: PropTypes.string.isRequired,
+      university: PropTypes.string.isRequired,
+      dateRange: PropTypes.string.isRequired,
+    }),
+  ),
 };
 
 export default EducationForm;

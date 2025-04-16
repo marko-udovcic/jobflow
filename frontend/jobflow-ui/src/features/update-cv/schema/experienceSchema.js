@@ -10,8 +10,8 @@ export const experienceSchema = Yup.object({
 
   dateRange: Yup.string()
     .matches(
-      /^(January|February|March|April|May|June|July|August|September|October|November|December) \d{4} [-to] (January|February|March|April|May|June|July|August|September|October|November|December) \d{4}$/,
-      "Format must be: 'January 2024 - January 2025'",
+      /^(January|February|March|April|May|June|July|August|September|October|November|December) \d{4} [-to] ((January|February|March|April|May|June|July|August|September|October|November|December) \d{4}|Present)$/,
+      "Format must be: 'January 2024 - January 2025' or 'January 2024 - Present'",
     )
     .required("Date range is required"),
 });
