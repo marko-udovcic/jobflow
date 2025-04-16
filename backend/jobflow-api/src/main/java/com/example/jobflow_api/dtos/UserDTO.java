@@ -20,4 +20,5 @@ public class UserDTO {
     private String phoneNumber;
     private String aboutCompany;
     private LocalDateTime createdAt;
+    private boolean enabled;
 }
