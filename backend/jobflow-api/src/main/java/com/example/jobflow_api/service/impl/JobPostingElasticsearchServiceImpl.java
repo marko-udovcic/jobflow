@@ -9,6 +9,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class JobPostingElasticsearchServiceImpl implements JobPostingElasticsearchService {
@@ -25,5 +27,13 @@ public class JobPostingElasticsearchServiceImpl implements JobPostingElasticsear
     @Override
     public void deleteJobPosting(String id) {
             jobPostingElasticsearchRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteJobPostingsByIds(List<String> ids) {
+
+        if(ids !=null && !ids.isEmpty()){
+            jobPostingElasticsearchRepository.deleteAllById(ids);
+        }
     }
 }
