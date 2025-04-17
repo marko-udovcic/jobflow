@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +34,7 @@ public class JobPostingController {
     private final JobSearchService jobSearchService;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('EMPLOYER')")
     public ResponseEntity<JobPosting> createJobPost(@Valid @RequestBody CreateJobPostingRequest createJobPostingRequest,
                                                     @AuthenticationPrincipal UserDetails userDetails) {
         String email = userDetails.getUsername();
@@ -58,6 +60,7 @@ public class JobPostingController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('EMPLOYER')")
     public ResponseEntity<?> deleteJobPosting(@PathVariable String id) {
         return jobPostingService.deleteJobPosting(id);
     }

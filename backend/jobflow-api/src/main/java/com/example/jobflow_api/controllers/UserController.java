@@ -8,9 +8,9 @@ import com.example.jobflow_api.service.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -31,18 +31,26 @@ public class UserController {
     }
 
     @PutMapping("/update-company")
-    public ResponseEntity<?> updateUser(@RequestBody UpdateCompanyRequest updateCompanyRequest, HttpServletRequest request) {
+    public ResponseEntity<?> updateCompany(@RequestBody UpdateCompanyRequest updateCompanyRequest, HttpServletRequest request) {
         AppUser updatedUser = userService.updateUser(updateCompanyRequest, request);
 
         return ResponseEntity.ok("User updated successfully");
     }
 
-    @PutMapping("/update-status/{id}")
+    @PutMapping("/company-status/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> updateCompanyStatus(@PathVariable String id, String status){
         return userService.updateCompanyStatus(id,status);
     }
 
+    @PutMapping("/user-status/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> updateUserStatus(@PathVariable String id, boolean enabled){
+        return userService.updateUserStatus(id, enabled);
+    }
+
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> deleteUserProfile(@PathVariable String id) {
         return userService.deleteUserProfile(id);
     }
