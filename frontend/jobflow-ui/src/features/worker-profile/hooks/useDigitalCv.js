@@ -6,8 +6,9 @@ export function useDigitalCv(userId) {
     data: digitalCv,
     isLoading,
     isError,
+    error,
   } = useQuery({
-    queryKey: ["digitalCv"],
+    queryKey: ["digitalCv", userId],
     queryFn: () => getDigitalCvByUserId(userId),
     enabled: !!userId,
     retry: false,
@@ -17,5 +18,5 @@ export function useDigitalCv(userId) {
   if (parsedDigitalCv) {
     return { digitalCv: parsedDigitalCv, isLoading, isError };
   }
-  return { digitalCv, isLoading, isError };
+  return { digitalCv, isLoading, isError, error };
 }
