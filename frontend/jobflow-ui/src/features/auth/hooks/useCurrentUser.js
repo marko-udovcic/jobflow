@@ -1,21 +1,44 @@
-import { getCurrentUser as getCurrentUserApi } from "../services/apiAuth";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "../../../store/useAuthStore";
 import { useEffect } from "react";
-export function useCurrentUser() {
-  let currentUser = useAuthStore((state) => state.currentUser);
-  let setUser = useAuthStore((state) => state.setUser);
+import { getCurrentUser } from "../services/apiAuth";
 
-  const { data, isLoading } = useQuery({
+export function useCurrentUser() {
+  const currentUser = useAuthStore((state) => state.currentUser);
+  const setUser = useAuthStore((state) => state.setUser);
+  const isLoggedOut = useAuthStore((state) => state.isLoggedOut);
+  const setLoading = useAuthStore((state) => state.setLoading);
+
+  const shouldFetch = currentUser === null || (currentUser === undefined && !isLoggedOut);
+
+  const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["currentUser"],
-    queryFn: getCurrentUserApi,
-    enabled: currentUser !== null,
+    queryFn: getCurrentUser,
+    retry: false,
+    refetchOnWindowFocus: false,
+    enabled: shouldFetch,
   });
+
   useEffect(() => {
+    if (isLoading) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+
     if (data) {
       setUser(data);
     }
-  }, [data, setUser]);
 
-  return { currentUser, isLoading };
+    if (isError) {
+      setUser(undefined);
+    }
+  }, [data, isError, error, setUser, setLoading, isLoading]);
+
+  return {
+    currentUser,
+    isLoading,
+    isError,
+    refetch,
+  };
 }

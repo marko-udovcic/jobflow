@@ -6,13 +6,16 @@ export function useLogout() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const setUser = useAuthStore((state) => state.setUser);
-
+  const setLoggedOut = useAuthStore((state) => state.setLoggedOut);
   const { mutate: logout, isLoading } = useMutation({
     mutationFn: logoutApi,
     onSuccess: () => {
+      console.log("Logout successful");
       queryClient.removeQueries();
       queryClient.removeQueries(["currentUser"]);
-      setUser(null);
+
+      setLoggedOut(true);
+      setUser(undefined);
       navigate("/login", { replace: true });
     },
   });
