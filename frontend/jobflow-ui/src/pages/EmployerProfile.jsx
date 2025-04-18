@@ -11,7 +11,6 @@ import { useParams } from "react-router-dom";
 import { useUser } from "../features/employer-profile/hooks/useUser";
 function EmployerProfile() {
   const currentUser = useAuthStore((state) => state.currentUser);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { id } = useParams();
   const companyId = id === undefined ? currentUser?.id : id;

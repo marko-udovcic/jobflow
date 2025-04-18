@@ -3,7 +3,6 @@ import HeroSection from "../features/worker-profile/components/HeroSection";
 import { useDigitalCv } from "../features/worker-profile/hooks/useDigitalCv";
 import { useAuthStore } from "../store/useAuthStore";
 import { useEffect } from "react";
-import { parseWorkerProfile } from "../features/worker-profile/util/parsedWorkerProfile";
 import PersonalInfo from "../features/worker-profile/components/PersonalInfo";
 import Summary from "../features/worker-profile/components/Summary";
 import WorkExperience from "../features/worker-profile/components/WorkExperience";
@@ -17,19 +16,22 @@ function WorkerProfile() {
 
   const currentUser = useAuthStore((state) => state.currentUser);
   const userId = id === undefined ? currentUser?.id : id;
-  const { digitalCv, isLoading, isError } = useDigitalCv(userId);
+  const { digitalCv: parsedDigitalCv, isLoading, isError } = useDigitalCv(userId);
 
   useEffect(() => {
     if (!isLoading && isError && id === undefined) {
       navigate("/worker/update-cv");
     }
-  }, [isLoading, digitalCv, navigate, id, isError]);
-  const parsedDigitalCv = parseWorkerProfile(digitalCv);
+  }, [isLoading, parsedDigitalCv, navigate, id, isError]);
   if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className="p-2 lg:p-0">
-      <HeroSection firstName={parsedDigitalCv?.firstname} lastname={parsedDigitalCv?.lastname} />
+      <HeroSection
+        firstName={parsedDigitalCv?.firstname}
+        lastname={parsedDigitalCv?.lastname}
+        userId={userId}
+      />
       <PersonalInfo userCv={parsedDigitalCv} />
       <Summary summary={parsedDigitalCv?.summary} />
       <WorkExperience workExperience={parsedDigitalCv?.workExperience} />
