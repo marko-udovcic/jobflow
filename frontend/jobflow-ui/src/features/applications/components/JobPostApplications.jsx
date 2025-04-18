@@ -14,6 +14,7 @@ function JobPostApplications({ jobPostingId }) {
   const [workerStatuses, setWorkerStatuses] = useState({});
 
   const { jobApplications, isLoading, handleStatusChange, handleSave } = useJobApplicationStatuses(
+    page,
     jobPostingId,
     workerStatuses,
     setWorkerStatuses,

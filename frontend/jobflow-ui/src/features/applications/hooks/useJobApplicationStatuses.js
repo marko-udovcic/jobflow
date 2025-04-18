@@ -2,7 +2,12 @@ import { useEffect } from "react";
 import { useJobApplications } from "./useJobApplications";
 import { useUpdateApplicationStatus } from "./useUpdateApplicationStatus";
 
-export function useJobApplicationStatuses(page, jobPostingId, workerStatuses, setWorkerStatuses) {
+export function useJobApplicationStatuses(
+  page = 0,
+  jobPostingId,
+  workerStatuses,
+  setWorkerStatuses,
+) {
   const { jobApplications, isLoading } = useJobApplications(page, jobPostingId);
   const { updateApplicationStatus } = useUpdateApplicationStatus(page, jobPostingId);
 
