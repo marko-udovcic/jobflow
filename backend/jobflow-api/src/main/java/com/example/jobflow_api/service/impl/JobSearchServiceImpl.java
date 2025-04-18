@@ -34,27 +34,21 @@ public class JobSearchServiceImpl implements JobSearchService {
 
     @Override
     public PaginationDTO<JobListingResponse> searchJobPostings(String title, String location, int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size,Sort.by(Sort.Direction.DESC,"postingDate"));
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "postingDate"));
         Page<JobPostingDocument> jobPostingsPage = null;
 
-        if((title != null && !title.isEmpty() )&&(location != null && !location.isEmpty())){
-            jobPostingsPage = jobSearchRepository.searchByTitleAndLocation(title,location, pageRequest);
-        }
-
-        else if (title != null && !title.isEmpty()) {
+        if ((title != null && !title.isEmpty()) && (location != null && !location.isEmpty())) {
+            jobPostingsPage = jobSearchRepository.searchByTitleAndLocation(title, location, pageRequest);
+        } else if (title != null && !title.isEmpty()) {
             jobPostingsPage = jobSearchRepository.searchByTitle(title, pageRequest);
-        }
-
-        else if (location != null && !location.isEmpty()) {
+        } else if (location != null && !location.isEmpty()) {
             jobPostingsPage = jobSearchRepository.searchByLocation(location, pageRequest);
-        }
-
-        else {
+        } else {
             jobPostingsPage = jobSearchRepository.findAll(pageRequest);
         }
 
-        List<JobListingResponse>  responseList = jobPostingsPage.getContent().stream()
-                .map(document ->{
+        List<JobListingResponse> responseList = jobPostingsPage.getContent().stream()
+                .map(document -> {
                     JobListingResponse response = modelMapper.map(document, JobListingResponse.class);
                     response.setCompanyName(document.getEmployerName());
                     return response;

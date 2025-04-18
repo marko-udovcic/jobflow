@@ -13,6 +13,7 @@ import com.example.jobflow_api.security.response.LoginResponse;
 import com.example.jobflow_api.security.response.MessageResponse;
 import com.example.jobflow_api.security.services.UserDetailsImpl;
 import com.example.jobflow_api.service.AuthService;
+import com.example.jobflow_api.service.UserElasticsearchService;
 import com.example.jobflow_api.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -31,6 +33,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
+
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,6 +47,7 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final UserService userService;
+    private final UserElasticsearchService userElasticsearchService;
 
     private final AuthTokenFilter authTokenFilter;
     @Transactional
@@ -61,10 +66,13 @@ public class AuthServiceImpl implements AuthService {
                     .email(signupRequest.getEmail())
                     .password(encodedPassword)
                     .role(userRole)
+                    .enabled(true)
                     .companyStatus(status)
+                    .createdAt(LocalDateTime.now())
                     .build();
 
             userRepository.save(user);
+            userElasticsearchService.indexUser(user);
 
             return new MessageResponse("User registered successfully!");
         } catch (Exception e) {
@@ -96,23 +104,31 @@ public class AuthServiceImpl implements AuthService {
         try {
             authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
+
             );
+
+
+        } catch(DisabledException disabledException){
+            Map<String, Object> map = new HashMap<>();
+            map.put("message", "User account is disabled. Please contact the administrator.");
+            map.put("status", false);
+            return new ResponseEntity<>(map, HttpStatus.UNAUTHORIZED);
         } catch (AuthenticationException exception) {
             Map<String, Object> map = new HashMap<>();
             map.put("message", "Bad credentials");
             map.put("status", false);
             return new ResponseEntity<>(map, HttpStatus.UNAUTHORIZED);
         }
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         String jwtToken = jwtUtils.generateTokenFromEmail(userDetails);
-        System.out.println("ispis tokena"+jwtToken);
+
         Cookie cookie = new Cookie("token", jwtToken);
         cookie.setHttpOnly(true);
         cookie.setSecure(false);
         cookie.setPath("/");
         cookie.setMaxAge(172800);
-        System.out.println("dodajem  token u response"+jwtToken);
         response.addCookie(cookie);
 
 
