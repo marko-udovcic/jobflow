@@ -7,17 +7,19 @@ function Pagination({ setPage, page, totalPages, isLoading }) {
     let end = Math.min(totalPages, start + 3);
     return Array.from({ length: end - start }, (_, i) => start + i);
   };
+
   return (
     <div>
       <div className="mt-4 flex justify-center space-x-2">
         <Button
-          onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
+          onClick={() => setPage(Math.max(page - 1, 0))}
           disabled={page === 0 || isLoading}
           variant="none"
-          className={`rounded-[10px] border border-none px-2 py-1 text-black`}
+          className="rounded-[10px] border border-none px-2 py-1 text-black"
         >
           Back
         </Button>
+
         {getPageNumbers().map((pageNum) => (
           <Button
             key={pageNum}
@@ -31,10 +33,11 @@ function Pagination({ setPage, page, totalPages, isLoading }) {
             {pageNum + 1}
           </Button>
         ))}
+
         <Button
-          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages - 1))}
+          onClick={() => setPage(Math.min(page + 1, totalPages - 1))}
           disabled={page + 1 >= totalPages || isLoading}
-          className={`rounded-[10px] border border-none px-2 py-1 text-black`}
+          className="rounded-[10px] border border-none px-2 py-1 text-black"
         >
           Next
         </Button>
@@ -42,11 +45,12 @@ function Pagination({ setPage, page, totalPages, isLoading }) {
     </div>
   );
 }
+
 Pagination.propTypes = {
   setPage: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   totalPages: PropTypes.number.isRequired,
-  isLoading: PropTypes.func,
+  isLoading: PropTypes.bool,
 };
 
 export default Pagination;

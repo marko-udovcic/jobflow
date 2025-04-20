@@ -7,7 +7,7 @@ export function useJobApplications(page, jobPostingId) {
     isError,
   } = useQuery({
     queryKey: ["applications", page, jobPostingId],
-    queryFn: () => getJobApplicationsByJobPostApi(page, jobPostingId),
+    queryFn: () => getJobApplicationsByJobPostApi(jobPostingId, page),
     placeholderData: keepPreviousData,
   });
   return { jobApplications, isLoading, isError };

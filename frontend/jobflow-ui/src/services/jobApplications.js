@@ -12,7 +12,7 @@ export async function getJobApplicationsByWorkerId(workerId) {
   return response.data;
 }
 
-export async function getJobApplicationsByJobPostingId(page, jobPostingId) {
+export async function getJobApplicationsByJobPostingId(jobPostingId, page) {
   const response = await axiosInstance.get(
     `/job-applications/job-post/${jobPostingId}?page=${page}&size=2`,
   );
@@ -24,7 +24,6 @@ export async function addJobApplication(data) {
   return response.data;
 }
 export async function updateJobApplicationStatus(data) {
-  console.log("ispis data iz servisa", data);
   const response = await axiosInstance.put(`/job-applications`, data);
   return response.data;
 }

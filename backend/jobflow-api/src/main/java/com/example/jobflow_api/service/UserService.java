@@ -20,4 +20,6 @@ public interface UserService {
     ResponseEntity<?> deleteUserProfile(String id);
 
     ResponseEntity<?> updateCompanyStatus(String id, String status);
+
+    ResponseEntity<?> updateUserStatus(String id, boolean enabled);
 }

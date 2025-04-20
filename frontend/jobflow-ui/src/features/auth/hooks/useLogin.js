@@ -4,6 +4,7 @@ import { loginUser as loginUserApi } from "../services/apiAuth";
 import { useAuthStore } from "../../../store/useAuthStore";
 export function useLogin() {
   const setUser = useAuthStore((state) => state.setUser);
+  const setLoggedOut = useAuthStore((state) => state.setLoggedOut);
   const navigate = useNavigate();
 
   const {
@@ -15,7 +16,9 @@ export function useLogin() {
 
     onSuccess: ({ roles }) => {
       const role = roles[0];
-      setUser({});
+
+      setLoggedOut(false);
+      setUser(null);
       redirectUser(role);
     },
   });

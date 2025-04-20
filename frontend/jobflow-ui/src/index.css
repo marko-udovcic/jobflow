@@ -23,18 +23,18 @@
   @apply rounded-2xl bg-[var(--color-btn-primary-bg)] p-1 text-[var(--color-btn-primary-text)];
 }
 
-#root {
-  @apply min-h-[100vh] bg-amber-200;
-}
 /* #root {
-  @apply min-h-[100vh] bg-[var(--color-body-bg)];
+  @apply min-h-[100vh] bg-amber-200;
 } */
+#root {
+  @apply min-h-[100vh] bg-[var(--color-body-bg)];
+}
 @layer base {
   h1 {
-    @apply text-3xl font-[var(--font-primary)] font-semibold text-[var(--color-heading-text)];
+    @apply text-[28px] font-[var(--font-primary)] font-semibold text-[var(--color-heading-text)] lg:text-4xl;
   }
   h2 {
-    @apply text-2xl font-[var(--font-primary)] font-semibold lg:text-[2.5rem];
+    @apply text-2xl font-[var(--font-primary)] font-semibold lg:text-[1.8rem];
   }
   p {
     @apply text-lg font-[var(--font-secondary)] font-normal text-[var(--color-paragraph-text)];

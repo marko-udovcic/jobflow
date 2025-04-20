@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import Card from "./Card";
 import JobCardContent from "./JobCardContent";
 import PropTypes from "prop-types";
+import Reveal from "./Reveal";
 function JobsList({ jobList, cardVariant, isAuthUser, className }) {
   return (
     <div className={`mt-5 ${className}`}>
@@ -12,7 +13,9 @@ function JobsList({ jobList, cardVariant, isAuthUser, className }) {
           {jobList.map((job) => (
             <NavLink to={`/job-post-details/${job.id}`} key={job.id}>
               <Card key={job.id} variant={cardVariant} className={"h-full"}>
-                <JobCardContent job={job} variant={cardVariant} isAuthUser={isAuthUser} />
+                <Reveal>
+                  <JobCardContent job={job} variant={cardVariant} isAuthUser={isAuthUser} />
+                </Reveal>
               </Card>
             </NavLink>
           ))}

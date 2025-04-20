@@ -1,18 +1,21 @@
 import { updateCompanyDetails as updateCompanyDetailsApi } from "../../../services/userService";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { useCurrentUser } from "../../auth/hooks/useCurrentUser";
 
 export function useUpdateCompanyDetails() {
-  const queryClient = useQueryClient();
-  const {
-    mutate: updateCompanyDetails,
-    isLoading,
-    error,
-  } = useMutation({
+  const { refetch } = useCurrentUser();
+
+  const mutation = useMutation({
     mutationFn: updateCompanyDetailsApi,
     onSuccess: () => {
       console.log("Company details updated successfully");
-      queryClient.invalidateQueries({ queryKey: ["currentUser"] });
+      refetch();
     },
   });
-  return { updateCompanyDetails, isLoading, error };
+
+  return {
+    updateCompanyDetails: mutation.mutate,
+    isLoading: mutation.isLoading,
+    error: mutation.error,
+  };
 }

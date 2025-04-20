@@ -12,6 +12,7 @@ import { useCvForm } from "../features/update-cv/hooks/useCvForm";
 import { useCreateCv } from "../features/update-cv/hooks/useCreateCv";
 import { useDigitalCv } from "../features/worker-profile/hooks/useDigitalCv";
 import { useUpdateCv } from "../features/update-cv/hooks/useUpdateCv";
+import Logout from "../features/auth/components/Logout";
 function UpdateCv() {
   const { workerId } = useParams();
   const isUpdateCv = workerId !== undefined;
@@ -37,7 +38,11 @@ function UpdateCv() {
   return (
     <div className="overflow-hidden p-2 lg:p-0">
       <div className="my-5 flex flex-col items-center justify-center p-2">
-        <Logo />
+        <div className="flex items-center justify-between xl:w-[70%]">
+          <Logo />
+          {!digitalCv && <Logout />}
+        </div>
+
         {!isUpdateCv && (
           <p className="mt-5 text-[#BC0A0A] lg:w-[70%]">
             Dear Candidate ,
