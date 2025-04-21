@@ -22,4 +22,6 @@ public interface UserService {
     ResponseEntity<?> updateCompanyStatus(String id, String status);
 
     ResponseEntity<?> updateUserStatus(String id, boolean enabled);
+
+    ResponseEntity<?> updatePassword(String userId, String newPassword);
 }

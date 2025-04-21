@@ -50,6 +50,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserElasticsearchService userElasticsearchService;
 
     private final AuthTokenFilter authTokenFilter;
+
     @Transactional
     public MessageResponse registerUser(SignupRequest signupRequest) {
         try {
@@ -108,7 +109,7 @@ public class AuthServiceImpl implements AuthService {
             );
 
 
-        } catch(DisabledException disabledException){
+        } catch (DisabledException disabledException) {
             Map<String, Object> map = new HashMap<>();
             map.put("message", "User account is disabled. Please contact the administrator.");
             map.put("status", false);
@@ -158,7 +159,7 @@ public class AuthServiceImpl implements AuthService {
         cookie.setHttpOnly(true);
         cookie.setSecure(false);
         cookie.setPath("/");
-        cookie.setMaxAge(172800);
+        cookie.setMaxAge(0);
         cookie.setDomain("localhost");
         response.addCookie(cookie);
 
@@ -168,12 +169,13 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public UserDTO getCurrentUserDto(HttpServletRequest request) {
         UserDetailsImpl userDetails = getCurrentUserDetails();
-        if(userDetails != null){
+        if (userDetails != null) {
             String userId = userDetails.getId();
 
             return userService.getUserById(userId);
         }
-        return  null;
+        return null;
     }
+
 
 }
