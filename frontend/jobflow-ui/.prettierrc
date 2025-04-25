@@ -1,0 +1,4 @@
+{
+  "plugins": ["prettier-plugin-classnames", "prettier-plugin-tailwindcss"],
+  "printWidth": 100
+}
