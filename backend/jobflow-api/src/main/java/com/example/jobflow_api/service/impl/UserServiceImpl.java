@@ -23,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,6 +40,7 @@ public class UserServiceImpl implements UserService {
     private final JobPostingElasticsearchService jobPostingElasticsearchService;
     private final JwtUtils jwtUtils;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder encoder;
 
 
     private ResponseEntity<?> findUserAndReturnResponse(String id) {
@@ -80,6 +82,7 @@ public class UserServiceImpl implements UserService {
                 }
 
                 userRepository.save(user);
+                userElasticsearchService.indexUser(user);
                 return user;
             } else {
                 throw new RuntimeException("User not found");
@@ -143,6 +146,30 @@ public class UserServiceImpl implements UserService {
         userElasticsearchService.indexUser(user);
 
         return ResponseEntity.ok("User profile updated successfully.");
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<?> updatePassword(String userId, String newPassword) {
+        try {
+            Optional<AppUser> userOptional = userRepository.findById(userId);
+
+            if (userOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User is not found");
+            }
+
+            AppUser user = userOptional.get();
+
+            String encodedPassword = encoder.encode(newPassword);
+            user.setPassword(encodedPassword);
+
+            userRepository.save(user);
+
+            return ResponseEntity.ok("Password is changed");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error during changing password: " + e.getMessage());
+        }
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.jobflow_api.controllers;
 
+import com.example.jobflow_api.dtos.PasswordUpdateRequest;
 import com.example.jobflow_api.dtos.UpdateCompanyRequest;
 import com.example.jobflow_api.dtos.UserDTO;
 import com.example.jobflow_api.exceptions.EntityNotFoundException;
@@ -12,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -39,13 +42,13 @@ public class UserController {
 
     @PutMapping("/company-status/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> updateCompanyStatus(@PathVariable String id, String status){
-        return userService.updateCompanyStatus(id,status);
+    public ResponseEntity<?> updateCompanyStatus(@PathVariable String id, String status) {
+        return userService.updateCompanyStatus(id, status);
     }
 
     @PutMapping("/user-status/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> updateUserStatus(@PathVariable String id, boolean enabled){
+    public ResponseEntity<?> updateUserStatus(@PathVariable String id, boolean enabled) {
         return userService.updateUserStatus(id, enabled);
     }
 
@@ -55,4 +58,12 @@ public class UserController {
         return userService.deleteUserProfile(id);
     }
 
+    @PutMapping("/{userId}/password")
+    public ResponseEntity<?> updatePassword(
+            @PathVariable String userId,
+            @RequestBody PasswordUpdateRequest request) {
+
+        return userService.updatePassword(userId, request.getPassword());
+
+    }
 }
