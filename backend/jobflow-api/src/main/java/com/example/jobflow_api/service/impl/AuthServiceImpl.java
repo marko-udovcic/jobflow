@@ -1,6 +1,7 @@
 package com.example.jobflow_api.service.impl;
 
 import com.example.jobflow_api.dtos.UserDTO;
+import com.example.jobflow_api.dtos.VerificationResponse;
 import com.example.jobflow_api.models.AppUser;
 import com.example.jobflow_api.models.enums.Status;
 import com.example.jobflow_api.models.enums.UserRole;
@@ -48,6 +49,8 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtils jwtUtils;
     private final UserService userService;
     private final UserElasticsearchService userElasticsearchService;
+    private final EmailServiceImpl emailService;
+
 
     private final AuthTokenFilter authTokenFilter;
 
@@ -63,22 +66,58 @@ public class AuthServiceImpl implements AuthService {
             UserRole userRole = userRoles.isEmpty() ? UserRole.WORKER : userRoles.iterator().next();
             Status status = signupRequest.getRole().contains(UserRole.EMPLOYER) ? Status.APPROVED : Status.NOT_A_COMPANY;
 
+            boolean isAdmin = userRoles.contains(UserRole.ADMIN);
             AppUser user = AppUser.builder()
                     .email(signupRequest.getEmail())
                     .password(encodedPassword)
                     .role(userRole)
-                    .enabled(true)
+                    .enabled(isAdmin)
                     .companyStatus(status)
                     .createdAt(LocalDateTime.now())
                     .build();
 
+            if (!isAdmin) {
+                user.generateVerificationToken();
+            }
             userRepository.save(user);
-            userElasticsearchService.indexUser(user);
+            if (isAdmin) {
+                userElasticsearchService.indexUser(user);
+                return new MessageResponse("Admin user registered successfully!");
+            } else {
+                emailService.sendVerificationEmail(user);
+                return new MessageResponse("User registered successfully! Please check your email for account verification.");
+            }
 
-            return new MessageResponse("User registered successfully!");
         } catch (Exception e) {
             return new MessageResponse("Error occurred during registration: " + e.getMessage());
         }
+    }
+
+    @Transactional
+    public VerificationResponse verifyEmail(String token) {
+        Optional<AppUser> userOpt = userRepository.findByVerificationToken(token);
+
+        if (userOpt.isEmpty()) {
+            return new VerificationResponse(false, "Invalid verification token");
+        }
+
+        AppUser user = userOpt.get();
+
+        // Check if token has expired
+        if (user.getVerificationTokenExpiryDate().isBefore(LocalDateTime.now())) {
+            return new VerificationResponse(false, "Verification token has expired");
+        }
+
+        // Activate user account
+        user.setEnabled(true);
+        user.setVerificationToken(null);
+        user.setVerificationTokenExpiryDate(null);
+        userRepository.save(user);
+
+
+        userElasticsearchService.indexUser(user);
+
+        return new VerificationResponse(true, "Email verified successfully! You can now log in.");
     }
 
 

@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<AppUser, String> {
     Boolean existsByEmail(String email);
     Optional<AppUser> findByEmail(String email);
+    Optional<AppUser> findByVerificationToken(String token);
 
     long countByCreatedAtBetweenAndRole(LocalDateTime start, LocalDateTime end, UserRole role);
 
