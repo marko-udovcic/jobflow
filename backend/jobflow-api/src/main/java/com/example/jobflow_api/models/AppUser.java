@@ -14,6 +14,7 @@ import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -59,4 +60,15 @@ public class AppUser {
     @OneToMany(mappedBy = "employer", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<JobPosting> jobPostings;
+
+    @Column(name = "verification_token")
+    private String verificationToken;
+
+    @Column(name = "verification_token_expiry_date")
+    private LocalDateTime verificationTokenExpiryDate;
+
+    public void generateVerificationToken() {
+        this.verificationToken = UUID.randomUUID().toString();
+        this.verificationTokenExpiryDate = LocalDateTime.now().plusHours(24);
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.jobflow_api.controllers;
 
 import com.example.jobflow_api.dtos.UserDTO;
+import com.example.jobflow_api.dtos.VerificationResponse;
 import com.example.jobflow_api.security.request.LoginRequest;
 import com.example.jobflow_api.security.request.SignupRequest;
 import com.example.jobflow_api.security.response.MessageResponse;
@@ -53,5 +54,16 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body("User is not authorized");
 
+    }
+
+    @GetMapping("/public/verify")
+    public ResponseEntity<VerificationResponse> verifyEmail(@RequestParam String token) {
+        VerificationResponse response = authService.verifyEmail(token);
+
+        if (response.isSuccess()) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
     }
 }

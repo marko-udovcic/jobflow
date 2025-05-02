@@ -7,10 +7,12 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./pages/ErrorPage.jsx";
 import MainLayout from "./pages/MainLayout.jsx";
 import ProtectedRoute from "./features/auth/components/ProtectedRoute.jsx";
-import Login from "./pages/Login.jsx";
-import AccountTypeChooser from "./pages/AccountTypeChooser.jsx";
 import LoadingSpinner from "./components/ui/LoadingSpinner.jsx";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
+const Login = lazy(() => import("./pages/Login.jsx"));
+const AccountTypeChooser = lazy(() => import("./pages/AccountTypeChooser.jsx"));
 const WorkerProfile = lazy(() => import("./pages/WorkerProfile.jsx"));
 const EmployerProfile = lazy(() => import("./pages/EmployerProfile.jsx"));
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard.jsx"));
@@ -20,6 +22,10 @@ const Register = lazy(() => import("./pages/Register.jsx"));
 const ExploreJobs = lazy(() => import("./pages/ExploreJobs.jsx"));
 const JobPostDetails = lazy(() => import("./pages/JobPostDetails.jsx"));
 const UpdateCv = lazy(() => import("./pages/UpdateCv.jsx"));
+const EmailVerification = lazy(() => import("./pages/EmailVerification.jsx"));
+
+// Helper function to wrap components in Suspense
+const withSuspense = (Component) => <Suspense fallback={<LoadingSpinner />}>{Component}</Suspense>;
 
 const router = createBrowserRouter([
   {
@@ -39,81 +45,43 @@ const router = createBrowserRouter([
         children: [
           {
             path: "/worker/profile/:id?",
-            element: (
-              <Suspense fallback={<LoadingSpinner />}>
-                <WorkerProfile />
-              </Suspense>
-            ),
+            element: withSuspense(<WorkerProfile />),
           },
           {
             path: "/employer/profile/:id?",
-            element: (
-              <Suspense fallback={<LoadingSpinner />}>
-                <EmployerProfile />
-              </Suspense>
-            ),
+            element: withSuspense(<EmployerProfile />),
           },
           {
             path: "/admin/dashboard",
-            element: (
-              <Suspense fallback={<LoadingSpinner />}>
-                <AdminDashboard />
-              </Suspense>
-            ),
+            element: withSuspense(<AdminDashboard />),
           },
           {
             path: "/employer/post-job",
             element: (
-              <ProtectedRoute
-                element={
-                  <Suspense fallback={<LoadingSpinner />}>
-                    <PostJob />
-                  </Suspense>
-                }
-                allowedRoles={["EMPLOYER"]}
-              />
+              <ProtectedRoute element={withSuspense(<PostJob />)} allowedRoles={["EMPLOYER"]} />
             ),
           },
           {
             path: "/applications",
             element: (
               <ProtectedRoute
-                element={
-                  <Suspense fallback={<LoadingSpinner />}>
-                    <Applications />
-                  </Suspense>
-                }
+                element={withSuspense(<Applications />)}
                 allowedRoles={["EMPLOYER", "WORKER"]}
               />
             ),
           },
           {
             path: "/explore-jobs",
-            element: (
-              <Suspense fallback={<LoadingSpinner />}>
-                <ExploreJobs />
-              </Suspense>
-            ),
+            element: withSuspense(<ExploreJobs />),
           },
           {
             path: "/job-post-details/:id",
-            element: (
-              <Suspense fallback={<LoadingSpinner />}>
-                <JobPostDetails />
-              </Suspense>
-            ),
+            element: withSuspense(<JobPostDetails />),
           },
           {
             path: "/worker/update-cv/:workerId?",
             element: (
-              <ProtectedRoute
-                element={
-                  <Suspense fallback={<LoadingSpinner />}>
-                    <UpdateCv />
-                  </Suspense>
-                }
-                allowedRoles={["WORKER"]}
-              />
+              <ProtectedRoute element={withSuspense(<UpdateCv />)} allowedRoles={["WORKER"]} />
             ),
           },
         ],
@@ -122,19 +90,19 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <Login />,
+    element: withSuspense(<Login />),
   },
   {
     path: "/register/:roleName",
-    element: (
-      <Suspense fallback={<LoadingSpinner />}>
-        <Register />
-      </Suspense>
-    ),
+    element: withSuspense(<Register />),
   },
   {
     path: "/account-type",
-    element: <AccountTypeChooser />,
+    element: withSuspense(<AccountTypeChooser />),
+  },
+  {
+    path: "/verify-email",
+    element: withSuspense(<EmailVerification />),
   },
 ]);
 
@@ -143,6 +111,7 @@ const queryClient = new QueryClient();
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
       <RouterProvider
         router={router}
         future={{

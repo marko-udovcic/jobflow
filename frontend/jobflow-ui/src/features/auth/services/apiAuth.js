@@ -40,3 +40,8 @@ export async function getCurrentUser() {
   const response = await axiosInstance.get("/current-user");
   return response.data;
 }
+
+export async function verifyEmail(token) {
+  const response = await axiosInstance.get(`/public/verify?token=${token}`);
+  return response.data;
+}

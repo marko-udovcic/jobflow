@@ -1,6 +1,7 @@
 package com.example.jobflow_api.service;
 
 import com.example.jobflow_api.dtos.UserDTO;
+import com.example.jobflow_api.dtos.VerificationResponse;
 import com.example.jobflow_api.security.request.LoginRequest;
 import com.example.jobflow_api.security.request.SignupRequest;
 import com.example.jobflow_api.security.response.MessageResponse;
@@ -26,4 +27,6 @@ public interface AuthService {
     ResponseEntity<?> logoutUser(HttpServletResponse response);
 
     UserDTO getCurrentUserDto(HttpServletRequest request);
+
+    VerificationResponse verifyEmail(String token);
 }
