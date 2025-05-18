@@ -2,6 +2,12 @@
 
 This web application aims to simplify the employment process for unemployed individuals and offer existing workers additional earning opportunities through freelance jobs. The platform will connect all standard job positions and freelance projects, enabling users to find opportunities that best match their skills, needs, and available time.
 
+## Worker Profile Demonstration
+https://github.com/user-attachments/assets/02a148ab-d48b-4c88-b634-2f52bde7fcb5
+
+## Verify Email Video
+https://github.com/user-attachments/assets/d6dd38f6-f8b1-462c-94a9-ab0b78b7949e
+
 ## Features
 
 The web application will have **three types of users**: **Administrator**, **Employer**, and **Worker**. Below is a breakdown of the functionalities available for each user type:
